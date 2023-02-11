@@ -18,6 +18,9 @@ class _ImportPoolState extends State<ImportPool> {
   final _formKey = GlobalKey<FormState>();
 
   String _token = "";
+  String? _validateMessage;
+  bool _validToken = false;
+
   @override
   Widget build(BuildContext context) {
     var selfId = getSelfId();
@@ -48,7 +51,7 @@ class _ImportPoolState extends State<ImportPool> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Import Pool"),
+        title: const Text("Join a Pool"),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
@@ -89,16 +92,32 @@ class _ImportPoolState extends State<ImportPool> {
                       maxLines: 6,
                       decoration:
                           const InputDecoration(labelText: 'Invite Token'),
-                      validator: (value) {
-                        return null;
-                      },
-                      onChanged: (val) => setState(() => _token = val),
+                      validator: (value) => _validateMessage,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      onChanged: (val) => setState(() {
+                        _token = val;
+                        try {
+                          var i = validateInvite(_token);
+                          if (i.config != null) {
+                            _validateMessage =
+                                "Invite to ${i.config?.name} by ${i.sender.nick}";
+                            _validToken = true;
+                          } else {
+                            _validateMessage =
+                                "Invite by ${i.sender.nick} is not for you";
+                            _validToken = false;
+                          }
+                        } catch (e) {
+                          _validateMessage = "invalid token: $e";
+                          _validToken = false;
+                        }
+                      }),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 16.0, horizontal: 16.0),
                       child: ElevatedButton(
-                        onPressed: _token != ""
+                        onPressed: _validToken
                             ? () {
                                 try {
                                   var config = addPool(_token);
@@ -107,6 +126,7 @@ class _ImportPoolState extends State<ImportPool> {
                                           content: Text(
                                     "Congrats! You successfully joined ${config.name}",
                                   )));
+                                  Navigator.pop(context);
                                 } catch (e) {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -117,7 +137,7 @@ class _ImportPoolState extends State<ImportPool> {
                                 }
                               }
                             : null,
-                        child: const Text('Create'),
+                        child: const Text('Join'),
                       ),
                     ),
                   ],

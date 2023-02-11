@@ -102,7 +102,7 @@ List<String> getPoolList() {
 }
 
 typedef CreatePool = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-void createPool(PoolConfig c, List<String> apps) {
+void createPool(Config c, List<String> apps) {
   var createPoolC = lib.lookupFunction<CreatePool, CreatePool>("createPool");
   var appsJson = "[${apps.map((e) => jsonEncode(e)).toList().join(",")}]";
   var cJson = jsonEncode(c.toJson());
@@ -111,10 +111,18 @@ void createPool(PoolConfig c, List<String> apps) {
 }
 
 typedef AddPool = CResult Function(ffi.Pointer<Utf8>);
-PoolConfig addPool(String token) {
+Config addPool(String token) {
   var addPoolC = lib.lookupFunction<AddPool, AddPool>("addPool");
   var m = addPoolC(token.toNativeUtf8()).unwrapMap();
-  return PoolConfig.fromJson(m);
+  return Config.fromJson(m);
+}
+
+typedef ValidateInvite = CResult Function(ffi.Pointer<Utf8>);
+Invite validateInvite(String token) {
+  var validateInviteC =
+      lib.lookupFunction<ValidateInvite, ValidateInvite>("validateInvite");
+  var m = validateInviteC(token.toNativeUtf8()).unwrapMap();
+  return Invite.fromJson(m);
 }
 
 typedef GetPool = CResult Function(ffi.Pointer<Utf8>);

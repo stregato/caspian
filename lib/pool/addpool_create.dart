@@ -17,7 +17,7 @@ const availableApps = ["chat", "library", "gallery"];
 class _CreatePoolState extends State<CreatePool> {
   final _formKey = GlobalKey<FormState>();
 
-  final _config = PoolConfig();
+  final _config = Config();
   final _appsMap = {for (var e in availableApps) e: true};
   String? _publicExchange;
   String? _privateExchange;
@@ -166,7 +166,22 @@ class _CreatePoolState extends State<CreatePool> {
                             _appsMap.forEach((key, value) {
                               if (value) apps.add(key);
                             });
-                            createPool(_config, apps);
+                            try {
+                              createPool(_config, apps);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      content: Text(
+                                "Congrats! You successfully created ${_config.name}",
+                              )));
+                              Navigator.pop(context);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        "Creation failed: $e",
+                                      )));
+                            }
                           }
                         : null,
                     child: const Text('Create'),

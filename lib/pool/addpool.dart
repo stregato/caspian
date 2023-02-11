@@ -9,7 +9,7 @@ class AddPool extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Pool"),
+        title: const Text("Join Pool"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

@@ -16,7 +16,6 @@ class Pool extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final poolName = ModalRoute.of(context)!.settings.arguments as String;
-
     var pool = getPool(poolName);
     var apps = pool.apps;
     var appsWidgets = apps.fold(<Widget>[], (res, e) {

@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-class PoolConfig {
+List<String> dynamicToStringList(dynamic value) {
+  return ((value ?? []) as List<dynamic>).map((e) => e.toString()).toList();
+}
+
+class Config {
   String name = "";
   List<String> public_ = [];
   List<String> private_ = [];
-  PoolConfig();
+  Config();
 
-  PoolConfig.fromJson(Map<String, dynamic> json)
+  Config.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        public_ = json['public'],
-        private_ = json['private'];
+        public_ = dynamicToStringList(json['public']),
+        private_ = dynamicToStringList(json['private']);
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -20,12 +24,10 @@ class PoolConfig {
 }
 
 class Key {
-  String public_;
-  String private_;
+  String? public_;
+  String? private_;
 
-  Key()
-      : private_ = "",
-        public_ = "";
+  Key();
 
   Key.fromJson(Map<String, dynamic> json)
       : public_ = json['pu'],
@@ -37,12 +39,24 @@ class Identity {
   String email = "";
   Key signatureKey = Key();
   Key encryptionKey = Key();
+  Identity();
 
   Identity.fromJson(Map<String, dynamic> json)
       : nick = json['n'],
         email = json['m'] ?? "",
         signatureKey = Key.fromJson(json["s"]),
         encryptionKey = Key.fromJson(json["e"]);
+}
+
+class Invite {
+  String subject = "";
+  Config? config;
+  Identity sender = Identity();
+  Invite();
+
+  Invite.fromJson(Map<String, dynamic> json)
+      : config = json["config"] ? Config.fromJson(json["config"]) : null,
+        sender = Identity.fromJson(json["host"]);
 }
 
 class Pool {
