@@ -110,10 +110,10 @@ void createPool(Config c, List<String> apps) {
       .unwrapVoid();
 }
 
-typedef AddPool = CResult Function(ffi.Pointer<Utf8>);
+typedef JoinPool = CResult Function(ffi.Pointer<Utf8>);
 Config addPool(String token) {
-  var addPoolC = lib.lookupFunction<AddPool, AddPool>("addPool");
-  var m = addPoolC(token.toNativeUtf8()).unwrapMap();
+  var joinPoolC = lib.lookupFunction<JoinPool, JoinPool>("joinPool");
+  var m = joinPoolC(token.toNativeUtf8()).unwrapMap();
   return Config.fromJson(m);
 }
 
@@ -132,14 +132,22 @@ Pool getPool(String name) {
   return Pool.fromJson(m);
 }
 
+typedef GetUsers = CResult Function(ffi.Pointer<Utf8>);
+List<Identity> getUsers(String name) {
+  var getUsersC = lib.lookupFunction<GetUsers, GetUsers>("getUsers");
+  var m = getUsersC(name.toNativeUtf8()).unwrapList();
+  return m.map((e) => Identity.fromJson(e)).toList();
+}
+
 typedef GetMessagesC = CResult Function(
     ffi.Pointer<Utf8>, ffi.Int64, ffi.Int64, ffi.Int32);
 typedef GetMessages = CResult Function(ffi.Pointer<Utf8>, int, int, int);
 List<Message> getMessages(
-    String poolName, int afterId, int beforeId, int limit) {
+    String poolName, DateTime after, DateTime before, int limit) {
   var getMessagesC =
       lib.lookupFunction<GetMessagesC, GetMessages>("getMessages");
-  var m = getMessagesC(poolName.toNativeUtf8(), afterId, beforeId, limit)
+  var m = getMessagesC(poolName.toNativeUtf8(), after.microsecondsSinceEpoch,
+          before.microsecondsSinceEpoch, limit)
       .unwrapList();
 
   return m.map((e) => Message.fromJson(e as Map<String, dynamic>)).toList();

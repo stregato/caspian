@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: any_link_preview
-      sha256: "362f681d0e54fcf3212741f68230eab499bd0cfc4531b9f450561f6ced9be52e"
+      sha256: e76bf06063a2d86a3f014d4d12a2782d139408eb6a9a2a8ccbe8f53b5dfea8e5
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.9"
+    version: "3.0.0"
   async:
     dependency: transitive
     description:
@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
+  audio_waveforms:
+    dependency: transitive
+    description:
+      name: audio_waveforms
+      sha256: c07be4f7ab271a846b27b5d0e388c96d37b794dea6c9dc6fce21886f359fc2e7
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   basic_utils:
     dependency: "direct main"
     description:
@@ -85,10 +93,10 @@ packages:
     dependency: "direct main"
     description:
       name: chatview
-      sha256: ea8b2613d773a31140d87e698f8e93222a690d4203c11122a9dc718b2f4b9c8d
+      sha256: "67a65cb068cfb5661c963e9b5286e9da02bc4fdfa213690f1f52c7c82c0b69a5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.3"
+    version: "1.1.0"
   clock:
     dependency: transitive
     description:
@@ -145,14 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  diffutil_dart:
-    dependency: transitive
-    description:
-      name: diffutil_dart
-      sha256: e0297e4600b9797edff228ed60f4169a778ea357691ec98408fa3b72994c7d06
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   emoji_picker_flutter:
     dependency: transitive
     description:
@@ -161,14 +161,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.2"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -198,30 +190,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_chat_types:
-    dependency: "direct main"
-    description:
-      name: flutter_chat_types
-      sha256: "34d1d61e46d5ca15f3b46e72d0a9ac98da72edc5eb5bf644a26e27351c9e15ba"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.6.0"
-  flutter_chat_ui:
-    dependency: "direct main"
-    description:
-      name: flutter_chat_ui
-      sha256: f13c48d06dd8be0d2feb0356a22d1cb6a0f83873b923b8d32bb4b55efb07cd39
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.6.6"
-  flutter_link_previewer:
-    dependency: transitive
-    description:
-      name: flutter_link_previewer
-      sha256: d495edef667d4b5db37fb6f31571406c137161a8399dd44a5de4ce2a7c7ba529
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.0"
   flutter_linkify:
     dependency: transitive
     description:
@@ -238,14 +206,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  flutter_parsed_text:
-    dependency: transitive
-    description:
-      name: flutter_parsed_text
-      sha256: "529cf5793b7acdf16ee0f97b158d0d4ba0bf06e7121ef180abe1a5b59e32c1e2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -308,10 +268,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: b1cbfec0f5aef427a18eb573f5445af8c9c568626bf3388553e40c263d3f7368
+      sha256: "385f12ee9c7288575572c7873a332016ec45ebd092e1c2f6bd421b4a9ad21f1d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.5+5"
+    version: "0.8.5+6"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -340,10 +300,10 @@ packages:
     dependency: transitive
     description:
       name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.0"
   js:
     dependency: transitive
     description:
@@ -472,14 +432,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-  photo_view:
-    dependency: transitive
-    description:
-      name: photo_view
-      sha256: "8036802a00bae2a78fc197af8a158e3e2f7b500561ed23b4c458107685e645bb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.0"
   platform:
     dependency: transitive
     description:
@@ -520,14 +472,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  scroll_to_index:
-    dependency: transitive
-    description:
-      name: scroll_to_index
-      sha256: b707546e7500d9f070d63e5acf74fd437ec7eeeb68d3412ef7b0afada0b4f176
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   share_plus:
     dependency: "direct main"
     description:
@@ -673,10 +617,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher
-      sha256: "698fa0b4392effdc73e9e184403b627362eb5fbf904483ac9defbb1c2191d809"
+      sha256: e8f2efc804810c0f2f5b485f49e7942179f56eabcfe81dce3387fec4bb55876b
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.8"
+    version: "6.1.9"
   url_launcher_android:
     dependency: transitive
     description:
@@ -689,10 +633,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_ios
-      sha256: bb328b24d3bccc20bdf1024a0990ac4f869d57663660de9c936fb8c043edefe3
+      sha256: "0a5af0aefdd8cf820dd739886efb1637f1f24489900204f50984634c07a54815"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.18"
+    version: "6.1.0"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -749,14 +693,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3"
   win32:
     dependency: transitive
     description:
@@ -784,4 +720,4 @@ packages:
     version: "0.2.0+3"
 sdks:
   dart: ">=2.19.0 <4.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.3.0"

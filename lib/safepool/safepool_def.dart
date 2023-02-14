@@ -41,6 +41,13 @@ class Identity {
   Key encryptionKey = Key();
   Identity();
 
+  String id() {
+    var b = BytesBuilder();
+    b.add(base64Decode(signatureKey.public_ ?? ""));
+    b.add(base64Decode(encryptionKey.public_ ?? ""));
+    return base64Encode(b.toBytes()).replaceAll("/", "_");
+  }
+
   Identity.fromJson(Map<String, dynamic> json)
       : nick = json['n'],
         email = json['m'] ?? "",
@@ -50,13 +57,15 @@ class Identity {
 
 class Invite {
   String subject = "";
-  Config? config;
   Identity sender = Identity();
+  List<String> recipientsId = List.empty();
+  Config? config;
   Invite();
 
   Invite.fromJson(Map<String, dynamic> json)
-      : config = json["config"] ? Config.fromJson(json["config"]) : null,
-        sender = Identity.fromJson(json["host"]);
+      : config =
+            json["config"] != null ? Config.fromJson(json["config"]) : null,
+        sender = Identity.fromJson(json["sender"]);
 }
 
 class Pool {

@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:caspian/common/main_navigation_bar.dart';
 import 'package:caspian/safepool/safepool.dart';
-import 'package:caspian/safepool/safepool_def.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
@@ -99,8 +97,9 @@ class _ImportPoolState extends State<ImportPool> {
                         try {
                           var i = validateInvite(_token);
                           if (i.config != null) {
-                            _validateMessage =
-                                "Invite to ${i.config?.name} by ${i.sender.nick}";
+                            _validateMessage = i.subject == ""
+                                ? "Invite to ${i.config?.name} by ${i.sender.nick}"
+                                : "Invite to ${i.config?.name} by ${i.sender.nick}: ${i.subject}";
                             _validToken = true;
                           } else {
                             _validateMessage =

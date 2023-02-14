@@ -96,8 +96,9 @@ extern Result getPoolList();
 extern Result createPool(char* config, char* apps);
 extern Result joinPool(char* token);
 extern Result getPool(char* name);
+extern Result getUsers(char* poolName);
 extern Result validateInvite(char* token);
-extern Result getMessages(char* poolName, long int afterIdS, long int beforeIdS, int limit);
+extern Result getMessages(char* poolName, long int after, long int before, int limit);
 extern Result postMessage(char* poolName, char* contentType, char* text, char* binary);
 extern Result getUpdates(long int ctime);
 

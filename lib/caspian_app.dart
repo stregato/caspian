@@ -1,4 +1,4 @@
-import 'package:caspian/apps/chat.dart';
+import 'package:caspian/apps/chat/chat.dart';
 import 'package:caspian/pool/addpool.dart';
 import 'package:caspian/pool/addpool_create.dart';
 import 'package:caspian/pool/addpool_import.dart';
