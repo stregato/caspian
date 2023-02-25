@@ -1,9 +1,18 @@
 import 'package:caspian/apps/chat/chat.dart';
+import 'package:caspian/apps/invite/invite.dart';
+import 'package:caspian/apps/invite/invite_list.dart';
+import 'package:caspian/apps/library/download_file.dart';
+import 'package:caspian/apps/library/library.dart';
+import 'package:caspian/apps/library/library_actions.dart';
+import 'package:caspian/apps/library/upload_file.dart';
+
 import 'package:caspian/pool/addpool.dart';
-import 'package:caspian/pool/addpool_create.dart';
-import 'package:caspian/pool/addpool_import.dart';
+import 'package:caspian/pool/create.dart';
+import 'package:caspian/pool/import.dart';
 import 'package:caspian/pool/pool.dart';
 import 'package:caspian/pool/home.dart';
+import 'package:caspian/pool/settings.dart';
+import 'package:caspian/pool/subpool.dart';
 import 'package:caspian/settings/settings.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +35,15 @@ class CaspianApp extends StatelessWidget {
         "/addPool/import": (context) => const ImportPool(),
         "/settings": (context) => const Settings(),
         "/pool": (context) => const Pool(),
+        "/pool/sub": (context) => const SubPool(),
+        "/pool/settings": (context) => const PoolSettings(),
         "/apps/chat": (context) => const Chat(),
+        "/apps/library": (context) => const Library(),
+        "/apps/library/upload": (context) => const UploadFile(),
+        "/apps/library/download": (context) => const DownloadFile(),
+        "/apps/library/actions": (context) => const LibraryActions(),
+        "/apps/invite": (context) => const Invite(),
+        "/apps/invite/list": (context) => const InviteList(),
       },
     );
   }

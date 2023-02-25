@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../common/main_navigation_bar.dart';
+import 'package:caspian/navigation/bar.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class Settings extends StatelessWidget {
       //   padding: const EdgeInsets.all(8),
       //   children: widgets,
       // ),
-      bottomNavigationBar: const MainNavigatorBar(),
+      bottomNavigationBar: const MainNavigationBar(null),
     );
   }
 }

@@ -94,58 +94,83 @@ String getSelfId() {
   return getSelfIdC().unwrapString();
 }
 
-typedef GetPoolList = CResult Function();
-List<String> getPoolList() {
-  var getPoolListC =
-      lib.lookupFunction<GetPoolList, GetPoolList>("getPoolList");
-  return getPoolListC().unwrapList().map((e) => e as String).toList();
+typedef PoolList = CResult Function();
+List<String> poolList() {
+  var poolListC = lib.lookupFunction<PoolList, PoolList>("poolList");
+  return poolListC().unwrapList().map((e) => e as String).toList();
 }
 
-typedef CreatePool = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-void createPool(Config c, List<String> apps) {
-  var createPoolC = lib.lookupFunction<CreatePool, CreatePool>("createPool");
+typedef PoolCreate = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+void poolCreate(Config c, List<String> apps) {
+  var poolCreateC = lib.lookupFunction<PoolCreate, PoolCreate>("poolCreate");
   var appsJson = "[${apps.map((e) => jsonEncode(e)).toList().join(",")}]";
   var cJson = jsonEncode(c.toJson());
-  return createPoolC(cJson.toNativeUtf8(), appsJson.toNativeUtf8())
+  return poolCreateC(cJson.toNativeUtf8(), appsJson.toNativeUtf8())
       .unwrapVoid();
 }
 
-typedef JoinPool = CResult Function(ffi.Pointer<Utf8>);
-Config addPool(String token) {
-  var joinPoolC = lib.lookupFunction<JoinPool, JoinPool>("joinPool");
-  var m = joinPoolC(token.toNativeUtf8()).unwrapMap();
+typedef PoolJoin = CResult Function(ffi.Pointer<Utf8>);
+Config poolJoin(String token) {
+  var poolJoinC = lib.lookupFunction<PoolJoin, PoolJoin>("poolJoin");
+  var m = poolJoinC(token.toNativeUtf8()).unwrapMap();
   return Config.fromJson(m);
 }
 
-typedef ValidateInvite = CResult Function(ffi.Pointer<Utf8>);
-Invite validateInvite(String token) {
+typedef PoolLeave = CResult Function(ffi.Pointer<Utf8>);
+void poolLeave(String name) {
+  var poolLeaveC = lib.lookupFunction<PoolJoin, PoolJoin>("poolLeave");
+  poolLeaveC(name.toNativeUtf8()).unwrapVoid();
+}
+
+typedef PoolSub = CResult Function(
+    ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+String poolSub(String name, String sub, List<String> ids, List<String> apps) {
+  var poolSubC = lib.lookupFunction<PoolSub, PoolSub>("poolSub");
+  return poolSubC(name.toNativeUtf8(), sub.toNativeUtf8(),
+          jsonEncode(ids).toNativeUtf8(), jsonEncode(apps).toNativeUtf8())
+      .unwrapString();
+}
+
+typedef PoolInvite = CResult Function(
+    ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+String poolInvite(String poolName, List<String> ids, String invitePool) {
+  var poolInviteC = lib.lookupFunction<PoolInvite, PoolInvite>("poolInvite");
+
+  var token = poolInviteC(poolName.toNativeUtf8(),
+          jsonEncode(ids).toNativeUtf8(), invitePool.toNativeUtf8())
+      .unwrapString();
+  return token;
+}
+
+typedef PoolGet = CResult Function(ffi.Pointer<Utf8>);
+Pool poolGet(String name) {
+  var poolGetC = lib.lookupFunction<PoolGet, PoolGet>("poolGet");
+  var m = poolGetC(name.toNativeUtf8()).unwrapMap();
+  return Pool.fromJson(m);
+}
+
+typedef PoolUsers = CResult Function(ffi.Pointer<Utf8>);
+List<Identity> poolUsers(String name) {
+  var poolUsersC = lib.lookupFunction<PoolUsers, PoolUsers>("poolUsers");
+  var m = poolUsersC(name.toNativeUtf8()).unwrapList();
+  return m.map((e) => Identity.fromJson(e)).toList();
+}
+
+typedef PoolParseInvite = CResult Function(ffi.Pointer<Utf8>);
+Invite poolParseInvite(String token) {
   var validateInviteC =
-      lib.lookupFunction<ValidateInvite, ValidateInvite>("validateInvite");
+      lib.lookupFunction<PoolParseInvite, PoolParseInvite>("poolParseInvite");
   var m = validateInviteC(token.toNativeUtf8()).unwrapMap();
   return Invite.fromJson(m);
 }
 
-typedef GetPool = CResult Function(ffi.Pointer<Utf8>);
-Pool getPool(String name) {
-  var getPoolC = lib.lookupFunction<GetPool, GetPool>("getPool");
-  var m = getPoolC(name.toNativeUtf8()).unwrapMap();
-  return Pool.fromJson(m);
-}
-
-typedef GetUsers = CResult Function(ffi.Pointer<Utf8>);
-List<Identity> getUsers(String name) {
-  var getUsersC = lib.lookupFunction<GetUsers, GetUsers>("getUsers");
-  var m = getUsersC(name.toNativeUtf8()).unwrapList();
-  return m.map((e) => Identity.fromJson(e)).toList();
-}
-
-typedef GetMessagesC = CResult Function(
+typedef ChatReceiveC = CResult Function(
     ffi.Pointer<Utf8>, ffi.Int64, ffi.Int64, ffi.Int32);
-typedef GetMessages = CResult Function(ffi.Pointer<Utf8>, int, int, int);
-List<Message> getMessages(
+typedef ChatReceive = CResult Function(ffi.Pointer<Utf8>, int, int, int);
+List<Message> chatReceive(
     String poolName, DateTime after, DateTime before, int limit) {
   var getMessagesC =
-      lib.lookupFunction<GetMessagesC, GetMessages>("getMessages");
+      lib.lookupFunction<ChatReceiveC, ChatReceive>("chatReceive");
   var m = getMessagesC(poolName.toNativeUtf8(), after.microsecondsSinceEpoch,
           before.microsecondsSinceEpoch, limit)
       .unwrapList();
@@ -153,18 +178,87 @@ List<Message> getMessages(
   return m.map((e) => Message.fromJson(e as Map<String, dynamic>)).toList();
 }
 
-typedef PostMessage = CResult Function(
+typedef ChatSend = CResult Function(
     ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
 int postMessage(
     String poolName, String contentType, String text, Uint8List binary) {
-  var postMessageC =
-      lib.lookupFunction<PostMessage, PostMessage>("postMessage");
+  var chatSendC = lib.lookupFunction<ChatSend, ChatSend>("chatSend");
 
-  var r = postMessageC(
+  var r = chatSendC(
     poolName.toNativeUtf8(),
     contentType.toNativeUtf8(),
     text.toNativeUtf8(),
     base64Encode(binary).toNativeUtf8(),
   );
   return r.unwrapInt();
+}
+
+typedef LibraryListT = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+LibraryList libraryList(String poolName, String folder) {
+  var libraryListC =
+      lib.lookupFunction<LibraryListT, LibraryListT>("libraryList");
+  var m =
+      libraryListC(poolName.toNativeUtf8(), folder.toNativeUtf8()).unwrapMap();
+
+  return LibraryList.fromJson(m);
+}
+
+// librarySend(poolName *C.char, localPath *C.char, name *C.char, solveConflicts C.int, tagsList *C.char) C.Result {
+typedef LibrarySendC = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>);
+typedef LibrarySendD = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>, int, ffi.Pointer<Utf8>);
+void librarySend(String poolName, String localPath, String name,
+    bool solveConflicts, List<String> tags) {
+  var librarySendC =
+      lib.lookupFunction<LibrarySendC, LibrarySendD>("librarySend");
+  var m = librarySendC(poolName.toNativeUtf8(), localPath.toNativeUtf8(),
+      name.toNativeUtf8(), solveConflicts ? 1 : 0, "[]".toNativeUtf8());
+  m.unwrapVoid();
+}
+
+// receiveDocument(poolName *C.char, id C.long, localPath *C.char) C.Result
+typedef ReceiveDocumentC = CResult Function(
+    ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>);
+typedef ReceiveDocumentD = CResult Function(
+    ffi.Pointer<Utf8>, int, ffi.Pointer<Utf8>);
+void receiveDocument(String poolName, int id, String localPath) {
+  var receiveDocumentC =
+      lib.lookupFunction<ReceiveDocumentC, ReceiveDocumentD>("receiveDocument");
+  var m =
+      receiveDocumentC(poolName.toNativeUtf8(), id, localPath.toNativeUtf8());
+  m.unwrapVoid();
+}
+
+// inviteReceive(poolName *C.char, after, onlyMine C.int) C.Result {
+typedef InviteReceiveC = CResult Function(
+    ffi.Pointer<Utf8>, ffi.Int64, ffi.Int32);
+typedef InviteReceiveD = CResult Function(ffi.Pointer<Utf8>, int, int);
+List<Invite> inviteReceive(String poolName, DateTime after, bool onlyMine) {
+  var inviteReceiveC =
+      lib.lookupFunction<InviteReceiveC, InviteReceiveD>("inviteReceive");
+  var m = inviteReceiveC(poolName.toNativeUtf8(), after.microsecondsSinceEpoch,
+          onlyMine ? 1 : 0)
+      .unwrapList();
+
+  return m.map((e) => Invite.fromJson(e as Map<String, dynamic>)).toList();
+}
+
+typedef NotificationsC = CResult Function(ffi.Int64);
+typedef NotificationsD = CResult Function(int);
+List<Notification> notifications(DateTime after) {
+  var notificationsC =
+      lib.lookupFunction<NotificationsC, NotificationsD>("notifications");
+  var m = notificationsC(after.microsecondsSinceEpoch).unwrapList();
+
+  return m
+      .map((e) => Notification.fromJson(e as Map<String, dynamic>))
+      .toList();
+}
+
+typedef FileOpen = CResult Function(ffi.Pointer<Utf8>);
+void fileOpen(String filePath) {
+  var fileOpenC = lib.lookupFunction<FileOpen, FileOpen>("fileOpen");
+  var m = fileOpenC(filePath.toNativeUtf8());
+  m.unwrapVoid();
 }

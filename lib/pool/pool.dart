@@ -2,12 +2,12 @@ import 'package:basic_utils/basic_utils.dart';
 import 'package:caspian/safepool/safepool.dart';
 import 'package:flutter/material.dart';
 
-import '../common/main_navigation_bar.dart';
+import '../navigation/bar.dart';
 
-var icons = {
+var appsIcons = {
   "chat": Icons.chat,
   "library": Icons.folder,
-  "invites": Icons.token,
+  "invite": Icons.token,
 };
 
 class Pool extends StatelessWidget {
@@ -16,7 +16,7 @@ class Pool extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final poolName = ModalRoute.of(context)!.settings.arguments as String;
-    var pool = getPool(poolName);
+    var pool = poolGet(poolName);
     var apps = pool.apps;
     var appsWidgets = apps.fold(<Widget>[], (res, e) {
       res.addAll([
@@ -31,7 +31,7 @@ class Pool extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const SizedBox(height: 20),
-                    Icon(icons[e]),
+                    Icon(appsIcons[e]),
                     const SizedBox(height: 10),
                     Text(StringUtils.capitalize(e)),
                     const SizedBox(height: 20),
@@ -56,7 +56,7 @@ class Pool extends StatelessWidget {
           children: appsWidgets,
         ),
       ),
-      bottomNavigationBar: const MainNavigatorBar(),
+      bottomNavigationBar: MainNavigationBar(poolName),
     );
   }
 }
