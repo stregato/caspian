@@ -1,5 +1,10 @@
 import 'dart:io';
+import 'dart:isolate';
 
+import 'package:caspian/common/const.dart';
+import 'package:caspian/common/document.dart';
+import 'package:caspian/common/io.dart';
+import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:caspian/safepool/safepool_def.dart' as sp;
@@ -7,9 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:caspian/apps/chat/theme.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:caspian/common/file_access.dart';
-import './download_file.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:path/path.dart' as path;
 
 class LibraryActions extends StatefulWidget {
@@ -28,12 +32,23 @@ class LibraryActionsArgs {
 class _LibraryActionsState extends State<LibraryActions> {
   AppTheme theme = LightTheme();
 
-  String _appDir = "";
-
   @override
   void initState() {
     super.initState();
-    getApplicationDocumentsDirectory().then((value) => _appDir = value.path);
+  }
+
+  static _saveFile(String poolName, int id, String target) {
+    return Isolate.run(() {
+      sp.librarySave(poolName, id, target);
+      return true;
+    });
+  }
+
+  static _receiveFile(String poolName, int id, String target) {
+    return Isolate.run(() {
+      sp.libraryReceive(poolName, id, target);
+      return true;
+    });
   }
 
   @override
@@ -48,8 +63,10 @@ class _LibraryActionsState extends State<LibraryActions> {
       return m;
     });
 
+    var libraryFolder = path.join(documentsFolder, poolName);
+
     var items = <Card>[];
-    if (d.localPath.isNotEmpty) {
+    if (d.localPath.isNotEmpty && d.state != sp.DocumentState.deleted) {
       items.add(
         Card(
           child: ListTile(
@@ -59,7 +76,7 @@ class _LibraryActionsState extends State<LibraryActions> {
           ),
         ),
       );
-      if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+      if (isDesktop) {
         items.add(
           Card(
             child: ListTile(
@@ -115,7 +132,7 @@ class _LibraryActionsState extends State<LibraryActions> {
       }
     }
     for (var v in d.versions) {
-      var author = nicks[v.authorId] ?? "Incognito";
+      var author = nicks[v.authorId] ?? "🥸 ${v.authorId}";
       DateFormat formatter = DateFormat('E d H:m');
       var modTime = formatter.format(v.modTime);
       switch (v.state) {
@@ -123,30 +140,63 @@ class _LibraryActionsState extends State<LibraryActions> {
           var localPath = "";
           var message = "";
           var title = "";
-          var editable = false;
+          var canChoose = false;
           if (d.localPath.isEmpty) {
-            localPath = path.join(_appDir, poolName, d.name);
-            title = "receive a new file from $author,"
+            localPath = path.join(libraryFolder, d.name);
+            title = "new file from $author,"
                 " added on $modTime";
-            message = "new content";
-            editable = !Platform.isAndroid && !Platform.isIOS;
+            message = "This is new content";
+            canChoose = isDesktop;
           } else {
             localPath = d.localPath;
-            title = "receive an update from $author,"
+            title = "update from $author,"
                 " added on $modTime";
             message = "the file contains an update on something you have";
-            editable = false;
+            canChoose = false;
           }
 
           items.add(
             Card(
               child: ListTile(
                 title: Text(title),
+                leading: const Icon(Icons.arrow_back),
+                onTap: () async {
+                  var d = Document(localPath, size: v.size, time: v.modTime);
+                  var target = await chooseFile(context, d,
+                      message: message, canChoose: canChoose);
+                  if (context.mounted && target != null) {
+                    var name = path.basename(target);
+                    progressDialog<bool>(context, "downloading $name",
+                        _receiveFile(poolName, v.id, target),
+                        successMessage: "$name received",
+                        errorMessage: "cannot receive $name",
+                        getProgress: getProgress(target, v.size));
+                  }
+                },
+              ),
+            ),
+          );
+
+          items.add(
+            Card(
+              child: ListTile(
+                title: Text("download a copy from $author,"
+                    " added on $modTime"),
                 leading: const Icon(Icons.download),
-                onTap: () {
-                  Navigator.pushNamed(context, "/apps/library/download",
-                      arguments: DownloadFileArgs(poolName, v.id, message,
-                          localPath, editable, v.modTime, v.size));
+                onTap: () async {
+                  var target = await chooseFile(
+                    context,
+                    Document(path.join(downloadFolder, path.basename(d.name)),
+                        size: v.size, time: v.modTime),
+                  );
+                  if (context.mounted && target != null) {
+                    var name = path.basename(target);
+                    progressDialog<bool>(context, "downloading $name",
+                        _saveFile(poolName, v.id, target),
+                        successMessage: "$name downloaded",
+                        errorMessage: "cannot download $name",
+                        getProgress: getProgress(target, v.size));
+                  }
                 },
               ),
             ),
@@ -170,18 +220,9 @@ class _LibraryActionsState extends State<LibraryActions> {
                 ),
                 leading: const Icon(Icons.download),
                 onTap: () {
-                  try {
-                    Navigator.pushNamed(context, "/apps/library/download",
-                        arguments: DownloadFileArgs(poolName, v.id, message,
-                            d.localPath, false, v.modTime, v.size));
-                    Navigator.pop(context);
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text(
-                          "Cannot upload ${d.name}: $e",
-                        )));
-                  }
+                  chooseFile(context,
+                      Document(d.localPath, time: v.modTime, size: v.size),
+                      message: message);
                 },
               ),
             ),
@@ -192,7 +233,7 @@ class _LibraryActionsState extends State<LibraryActions> {
       }
     }
 
-    if (d.localPath.isNotEmpty) {
+    if (d.localPath.isNotEmpty && d.state != sp.DocumentState.deleted) {
       items.add(
         Card(
           child: ListTile(

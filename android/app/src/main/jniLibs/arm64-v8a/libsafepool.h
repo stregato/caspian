@@ -88,7 +88,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern Result start(char* dbPath);
+extern Result start(char* dbPath, char* availableBandwith);
 extern Result stop();
 extern Result getSelfId();
 extern Result getSelf();
@@ -109,6 +109,9 @@ extern Result librarySend(char* poolName, char* localPath, char* name, int solve
 extern Result inviteReceive(char* poolName, int after, int onlyMine);
 extern Result notifications(long ctime);
 extern Result fileOpen(char* filePath);
+extern Result dump();
+extern Result setLogLevel(int level);
+extern Result setAvailableBandwidth(char* availableBandwidth);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,6 @@
 import 'package:caspian/apps/chat/chat.dart';
 import 'package:caspian/apps/invite/invite.dart';
 import 'package:caspian/apps/invite/invite_list.dart';
-import 'package:caspian/apps/library/download_file.dart';
 import 'package:caspian/apps/library/library.dart';
 import 'package:caspian/apps/library/library_actions.dart';
 import 'package:caspian/apps/library/upload_file.dart';
@@ -40,7 +39,7 @@ class CaspianApp extends StatelessWidget {
         "/apps/chat": (context) => const Chat(),
         "/apps/library": (context) => const Library(),
         "/apps/library/upload": (context) => const UploadFile(),
-        "/apps/library/download": (context) => const DownloadFile(),
+//        "/apps/library/download": (context) => const DownloadFile(),
         "/apps/library/actions": (context) => const LibraryActions(),
         "/apps/invite": (context) => const Invite(),
         "/apps/invite/list": (context) => const InviteList(),
@@ -48,46 +47,3 @@ class CaspianApp extends StatelessWidget {
     );
   }
 }
-
-// class CaspianPage extends StatefulWidget {
-//   const CaspianPage({super.key, required this.title});
-
-//   // This widget is the home page of your application. It is stateful, meaning
-//   // that it has a State object (defined below) that contains fields that affect
-//   // how it looks.
-
-//   // This class is the configuration for the state. It holds the values (in this
-//   // case the title) provided by the parent (in this case the App widget) and
-//   // used by the build method of the State. Fields in a Widget subclass are
-//   // always marked "final".
-
-//   final String title;
-
-//   @override
-//   State<CaspianPage> createState() => _CaspianPageState();
-// }
-
-// class _CaspianPageState extends State<CaspianPage> {
-//   int _selectedScreenIndex = 0;
-//   late List _screens;
-
-//   _CaspianPageState() {
-//     _screens = [
-//       PoolList(
-//         selectScreen: _selectScreen,
-//       ),
-//       const Settings(),
-//     ];
-//   }
-
-//   void _selectScreen(int index) {
-//     setState(() {
-//       _selectedScreenIndex = index;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return _screens[_selectedScreenIndex];
-//   }
-// }

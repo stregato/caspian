@@ -8,6 +8,8 @@ import 'package:caspian/safepool/safepool.dart' as sp;
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:open_file_plus/open_file_plus.dart' as of;
 
+late Directory applicationSupportDirectory;
+
 Future<String> openFile(BuildContext context, String filePath) {
   // try {
   if (Platform.isAndroid || Platform.isIOS) {

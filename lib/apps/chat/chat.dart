@@ -1,12 +1,16 @@
 import 'dart:async';
-import 'dart:io';
+
 import 'dart:typed_data';
 
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:flutter/material.dart';
-import 'package:chatview/chatview.dart' as cv;
-import 'package:caspian/apps/chat/theme.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart' as chat;
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -16,16 +20,15 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  AppTheme theme = LightTheme();
+  final List<types.Message> _messages = [];
+  String _poolName = "";
   DateTime _after = DateTime.fromMicrosecondsSinceEpoch(0);
   DateTime _before = DateTime.fromMicrosecondsSinceEpoch(0);
-  String _poolName = "";
-  late cv.ChatUser _currentUser;
-  late cv.ChatController _chatController;
-
   Timer? timer;
   DateTime _lastMessage = DateTime.now();
-  final Set<int> _sentMessages = {};
+  late types.User _currentUser;
+  final Map<String, types.User> _users = {};
+  final Set<String> _loaded = {};
 
   @override
   void initState() {
@@ -35,10 +38,21 @@ class _ChatState extends State<Chat> {
       (Timer t) {
         var diff = DateTime.now().difference(_lastMessage).inSeconds;
         if (diff < 20 || diff > 50) {
-          loadMoreMessages();
+          _loadMoreMessages();
         }
       },
     );
+  }
+
+  void _setUsers() {
+    var p = sp.poolGet(_poolName);
+    _currentUser = types.User(
+        id: p.self.id(), firstName: p.self.nick, lastName: p.self.email);
+
+    for (var u in sp.poolUsers(_poolName)) {
+      _users[u.id()] =
+          types.User(id: u.id(), firstName: u.nick, lastName: u.email);
+    }
   }
 
   @override
@@ -47,57 +61,31 @@ class _ChatState extends State<Chat> {
     timer?.cancel();
   }
 
-  void initController() {
-    final chatUsers = sp
-        .poolUsers(_poolName)
-        .map((e) => cv.ChatUser(
-              id: e.id(),
-              name: e.nick,
-            ))
-        .toList();
-    _chatController = cv.ChatController(
-      initialMessageList: <cv.Message>[],
-      scrollController: ScrollController(),
-      chatUsers: chatUsers,
-    );
-  }
-
-  void loadMoreMessages() {
+  void _loadMoreMessages() {
     _before = DateTime.now();
     var messages = sp.chatReceive(_poolName, _after, _before, 100);
+    messages = messages.where((e) => !_loaded.contains(e.id)).toList();
     if (messages.isNotEmpty) {
       setState(() {
-        _chatController.loadMoreData(messages
-            .map((e) {
-              switch (e.contentType) {
-                case 'text/html':
-                  return cv.Message(
-                    id: e.id,
-                    message: e.text,
-                    createdAt: e.time,
-                    sendBy: e.author,
-                  );
-                default:
-                  return cv.Message(
-                    id: e.id,
-                    message: "unsupported content ${e.contentType}",
-                    createdAt: e.time,
-                    sendBy: e.author,
-                    messageType: cv.MessageType.text,
-                  );
-              }
-            })
-            .where((e) => !_sentMessages.contains(int.parse(e.id)))
-            .toList());
+        _messages.addAll(messages.map((e) {
+          var user = _users[e.author] ?? types.User(id: e.author);
+          _loaded.add(e.id);
+          switch (e.contentType) {
+            case 'text/plain':
+              return types.TextMessage(id: e.id, text: e.text, author: user);
+            default:
+              return types.TextMessage(
+                  id: e.id,
+                  createdAt: e.time.millisecondsSinceEpoch,
+                  text: "unsupported content ${e.contentType}",
+                  author: types.User(id: e.author));
+          }
+        }).toList());
+
         _after = messages.last.time;
         _lastMessage = DateTime.now();
       });
     }
-  }
-
-  void setUser() {
-    var p = sp.poolGet(_poolName);
-    _currentUser = cv.ChatUser(id: p.self.id(), name: p.self.nick);
   }
 
   @override
@@ -106,25 +94,9 @@ class _ChatState extends State<Chat> {
 
     if (_poolName.isEmpty) {
       _poolName = poolName;
-
-      setUser();
-      initController();
-      loadMoreMessages();
+      _setUsers();
+      _loadMoreMessages();
     }
-
-    var chatBackgroundConfig = cv.ChatBackgroundConfiguration(
-      messageTimeIconColor: theme.messageTimeIconColor,
-      messageTimeTextStyle: TextStyle(color: theme.messageTimeTextColor),
-      defaultGroupSeparatorConfig: cv.DefaultGroupSeparatorConfiguration(
-        textStyle: TextStyle(
-          color: theme.chatHeaderColor,
-          fontSize: 17,
-        ),
-      ),
-      backgroundColor: theme.backgroundColor,
-    );
-
-    var isDesktop = Platform.isMacOS || Platform.isLinux || Platform.isWindows;
 
     return Scaffold(
       appBar: AppBar(
@@ -139,84 +111,138 @@ class _ChatState extends State<Chat> {
           ),
         ],
       ),
-      body: cv.ChatView(
-        currentUser: _currentUser,
-        chatViewState: cv.ChatViewState.hasMessages,
-        chatController: _chatController,
-        onSendTap: _onSendTap,
-        sendMessageConfig: cv.SendMessageConfiguration(
-          allowRecordingVoice: !isDesktop,
-          imagePickerIconsConfig: cv.ImagePickerIconsConfiguration(
-            onImageSelected: (imagePath, error) {},
-            cameraIconColor: Colors.black,
-            galleryIconColor: Colors.black,
-          ),
-          textFieldConfig: cv.TextFieldConfiguration(
-            textStyle: TextStyle(color: theme.textFieldTextColor),
-          ),
-        ),
-        chatBackgroundConfig: chatBackgroundConfig,
-        chatBubbleConfig: cv.ChatBubbleConfiguration(
-          outgoingChatBubbleConfig: cv.ChatBubble(
-            linkPreviewConfig: cv.LinkPreviewConfiguration(
-                backgroundColor: theme.linkPreviewOutgoingChatColor,
-                bodyStyle: theme.outgoingChatLinkBodyStyle,
-                titleStyle: theme.outgoingChatLinkTitleStyle,
-                loadingColor: Colors.black54),
-            color: theme.outgoingChatBubbleColor,
-          ),
-          inComingChatBubbleConfig: cv.ChatBubble(
-            linkPreviewConfig: cv.LinkPreviewConfiguration(
-              linkStyle: TextStyle(
-                color: theme.inComingChatBubbleTextColor,
-                decoration: TextDecoration.underline,
-              ),
-              backgroundColor: theme.linkPreviewIncomingChatColor,
-              bodyStyle: theme.incomingChatLinkBodyStyle,
-              titleStyle: theme.incomingChatLinkTitleStyle,
-            ),
-            textStyle: TextStyle(color: theme.inComingChatBubbleTextColor),
-            senderNameTextStyle:
-                TextStyle(color: theme.inComingChatBubbleTextColor),
-            color: theme.inComingChatBubbleColor,
-          ),
-        ),
-        replyPopupConfig: cv.ReplyPopupConfiguration(
-          backgroundColor: theme.replyPopupColor,
-          buttonTextStyle: TextStyle(color: theme.replyPopupButtonColor),
-          topBorderColor: theme.replyPopupTopBorderColor,
-        ),
-        reactionPopupConfig: cv.ReactionPopupConfiguration(
-          shadow: BoxShadow(
-            color: Colors.grey.shade400,
-            blurRadius: 20,
-          ),
-          backgroundColor: theme.reactionPopupColor,
-        ),
-        swipeToReplyConfig: cv.SwipeToReplyConfiguration(
-          replyIconColor: theme.swipeToReplyIconColor,
-        ),
+      body: chat.Chat(
+        messages: _messages,
+        onAttachmentPressed: () {
+          _handleAttachmentPressed(context);
+        },
+        // onMessageTap: _handleMessageTap,
+        // onPreviewDataFetched: _handlePreviewDataFetched,
+        onSendPressed: _handleSendPressed,
+        showUserAvatars: true,
+        showUserNames: true,
+        user: _currentUser,
       ),
       bottomNavigationBar: MainNavigationBar(poolName),
     );
   }
 
-  void _onSendTap(
-    String message,
-    cv.ReplyMessage replyMessage,
-  ) {
-    var id = sp.postMessage(_poolName, "text/html", message, Uint8List(0));
-    _sentMessages.add(id);
-    _lastMessage = DateTime.now();
-    _chatController.addMessage(
-      cv.Message(
-        id: id.toString(),
-        createdAt: DateTime.now(),
-        message: message,
-        sendBy: _currentUser.id,
-        replyMessage: replyMessage,
-        messageType: cv.MessageType.text,
+  void _handleSendPressed(types.PartialText message) {
+    var id = sp.chatSend(_poolName, "text/plain", message.text, Uint8List(0));
+
+    final textMessage = types.TextMessage(
+      author: _currentUser,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      id: "$id",
+      text: message.text,
+    );
+
+    _addMessage(textMessage);
+  }
+
+  void _handleAttachmentPressed(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => SafeArea(
+        child: SizedBox(
+          height: 144,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _handleImageSelection();
+                },
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Photo'),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _handleFileSelection();
+                },
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('File'),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Cancel'),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  void _handleFileSelection() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+    );
+
+    if (result != null && result.files.single.path != null) {
+      var localPath = result.files.single.path!;
+      sp.librarySend(
+          _poolName, localPath, "uploads/${basename(localPath)}", true, []);
+      final mimeType = lookupMimeType(result.files.single.path!);
+
+      var id = sp.chatSend(
+          _poolName, mimeType!, "uploads/${basename(localPath)}", Uint8List(0));
+
+      final message = types.FileMessage(
+        author: _currentUser,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        id: "$id",
+        mimeType: lookupMimeType(result.files.single.path!),
+        name: result.files.single.name,
+        size: result.files.single.size,
+        uri: localPath,
+      );
+
+      _addMessage(message);
+    }
+  }
+
+  void _handleImageSelection() async {
+    final result = await ImagePicker().pickImage(
+      imageQuality: 70,
+      maxWidth: 1440,
+      source: ImageSource.gallery,
+    );
+
+    if (result != null) {
+      final bytes = await result.readAsBytes();
+      final image = await decodeImageFromList(bytes);
+
+      final mimeType = lookupMimeType(result.path);
+      var id = sp.chatSend(_poolName, mimeType ?? "image/jpeg", "", bytes);
+
+      final message = types.ImageMessage(
+        author: _currentUser,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        height: image.height.toDouble(),
+        id: "$id",
+        name: result.name,
+        size: bytes.length,
+        uri: result.path,
+        width: image.width.toDouble(),
+      );
+
+      _addMessage(message);
+    }
+  }
+
+  void _addMessage(types.Message message) {
+    setState(() {
+      _messages.insert(0, message);
+    });
   }
 }

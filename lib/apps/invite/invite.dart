@@ -100,7 +100,7 @@ class _InviteState extends State<Invite> {
                       maxLines: 2,
                       controller: idController,
                       decoration: InputDecoration(
-                        labelText: 'Enter the id and press +',
+                        labelText: 'Enter the id',
                         suffixIcon: IconButton(
                           onPressed: () {
                             if (idController.text.isNotEmpty) {

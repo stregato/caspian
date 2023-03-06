@@ -34,6 +34,15 @@ class CResult extends ffi.Struct {
     }
   }
 
+  String unwrapRaw() {
+    unwrapVoid();
+    if (res.address == 0) {
+      return "";
+    }
+
+    return res.toDartString();
+  }
+
   String unwrapString() {
     unwrapVoid();
     if (res.address == 0) {
@@ -82,10 +91,10 @@ class CException implements Exception {
   }
 }
 
-typedef Start = CResult Function(ffi.Pointer<Utf8>);
-void start(String dbPath) {
+typedef Start = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+void start(String dbPath, String availableBandwith) {
   var startC = lib.lookupFunction<Start, Start>("start");
-  startC(dbPath.toNativeUtf8()).unwrapVoid();
+  startC(dbPath.toNativeUtf8(), availableBandwith.toNativeUtf8()).unwrapVoid();
 }
 
 typedef GetSelfId = CResult Function();
@@ -180,7 +189,7 @@ List<Message> chatReceive(
 
 typedef ChatSend = CResult Function(
     ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-int postMessage(
+int chatSend(
     String poolName, String contentType, String text, Uint8List binary) {
   var chatSendC = lib.lookupFunction<ChatSend, ChatSend>("chatSend");
 
@@ -217,16 +226,28 @@ void librarySend(String poolName, String localPath, String name,
   m.unwrapVoid();
 }
 
-// receiveDocument(poolName *C.char, id C.long, localPath *C.char) C.Result
-typedef ReceiveDocumentC = CResult Function(
+// libraryReceive(poolName *C.char, id C.long, localPath *C.char) C.Result
+typedef LibraryReceiveC = CResult Function(
     ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>);
-typedef ReceiveDocumentD = CResult Function(
+typedef LibraryReceiveD = CResult Function(
     ffi.Pointer<Utf8>, int, ffi.Pointer<Utf8>);
-void receiveDocument(String poolName, int id, String localPath) {
-  var receiveDocumentC =
-      lib.lookupFunction<ReceiveDocumentC, ReceiveDocumentD>("receiveDocument");
+void libraryReceive(String poolName, int id, String localPath) {
+  var libraryReceiveC =
+      lib.lookupFunction<LibraryReceiveC, LibraryReceiveD>("libraryReceive");
   var m =
-      receiveDocumentC(poolName.toNativeUtf8(), id, localPath.toNativeUtf8());
+      libraryReceiveC(poolName.toNativeUtf8(), id, localPath.toNativeUtf8());
+  m.unwrapVoid();
+}
+
+// librarySave(poolName *C.char, id C.long, localPath *C.char) C.Result
+typedef LibrarySaveC = CResult Function(
+    ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>);
+typedef LibrarySaceD = CResult Function(
+    ffi.Pointer<Utf8>, int, ffi.Pointer<Utf8>);
+void librarySave(String poolName, int id, String dest) {
+  var librarySaveC =
+      lib.lookupFunction<LibrarySaveC, LibrarySaceD>("librarySave");
+  var m = librarySaveC(poolName.toNativeUtf8(), id, dest.toNativeUtf8());
   m.unwrapVoid();
 }
 
@@ -260,5 +281,21 @@ typedef FileOpen = CResult Function(ffi.Pointer<Utf8>);
 void fileOpen(String filePath) {
   var fileOpenC = lib.lookupFunction<FileOpen, FileOpen>("fileOpen");
   var m = fileOpenC(filePath.toNativeUtf8());
+  m.unwrapVoid();
+}
+
+typedef Dump = CResult Function();
+String logs() {
+  var dumpC = lib.lookupFunction<Dump, Dump>("dump");
+  var m = dumpC();
+  return m.unwrapRaw();
+}
+
+typedef SetLogLevelC = CResult Function(ffi.Int32);
+typedef SetLogLevelD = CResult Function(int);
+void setLogLevel(int level) {
+  var setLogLevelC =
+      lib.lookupFunction<SetLogLevelC, SetLogLevelD>("setLogLevel");
+  var m = setLogLevelC(level);
   m.unwrapVoid();
 }

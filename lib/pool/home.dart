@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:isolate';
 
+import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:flutter/material.dart';
@@ -53,44 +55,12 @@ void waitDialog<T>(
 class _HomeState extends State<Home> {
   Future<Object?> openPool(BuildContext context, String pool,
       [bool mounted = true]) async {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            // The background color
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // The loading indicator
-                  const CircularProgressIndicator(),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text("Connecting to $pool...")
-                ],
-              ),
-            ),
-          );
-        });
-    try {
-      await Isolate.run(() {
-        sp.poolGet(pool);
-      });
-      if (!mounted) return null;
-      Navigator.of(context).pop();
+    var p =
+        await progressDialog(context, "Connecting to $pool...", Isolate.run(() {
+      return sp.poolGet(pool);
+    }), errorMessage: "cannot connect to %s");
+    if (p != null && context.mounted) {
       return Navigator.pushNamed(context, "/pool", arguments: pool);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(
-            "Cannot connect to  $pool: $e",
-          )));
-      Navigator.of(context).pop();
     }
     return null;
   }

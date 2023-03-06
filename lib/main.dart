@@ -1,17 +1,26 @@
 import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:caspian/common/io.dart';
 import 'package:caspian/safepool/safepool.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:window_size/window_size.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'caspian_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  getApplicationSupportDirectory().then((appSupDir) {
-    start("${appSupDir.path}/safepool.db");
-    runApp(const CaspianApp());
+  initFolders().then((_) {
+    Connectivity().checkConnectivity().then((c) {
+      var availableBandwidth =
+          Platform.isMacOS || Platform.isLinux || Platform.isWindows
+              ? "high"
+              : c == ConnectivityResult.wifi
+                  ? "medium"
+                  : "low";
+      start("$applicationFolder/.safepool.db", availableBandwidth);
+      runApp(const CaspianApp());
+    });
   });
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
