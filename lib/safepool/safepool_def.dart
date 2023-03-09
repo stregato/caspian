@@ -88,7 +88,7 @@ class Pool {
       };
 }
 
-class Message {
+class ChatMessage {
   String id;
   String author;
   DateTime time;
@@ -96,7 +96,7 @@ class Message {
   String text;
   Uint8List binary;
 
-  Message()
+  ChatMessage()
       : id = "0",
         author = "",
         time = DateTime.now(),
@@ -104,7 +104,7 @@ class Message {
         text = "",
         binary = Uint8List(0);
 
-  Message.fromJson(Map<String, dynamic> json)
+  ChatMessage.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         author = json['author'],
         time = DateTime.parse(json['time']),
@@ -139,7 +139,7 @@ enum DocumentState {
   }
 }
 
-class Version {
+class LibraryVersion {
   String authorId;
   DocumentState state;
   int size;
@@ -149,7 +149,7 @@ class Version {
   List<String> tags;
   int id;
 
-  Version()
+  LibraryVersion()
       : authorId = "",
         state = DocumentState.sync,
         size = 0,
@@ -159,7 +159,7 @@ class Version {
         tags = [],
         id = 0;
 
-  Version.fromJson(Map<String, dynamic> json)
+  LibraryVersion.fromJson(Map<String, dynamic> json)
       : authorId = json['authorId'],
         state = DocumentState.fromInt(json['state']),
         size = json['size'],
@@ -170,7 +170,37 @@ class Version {
         id = json['id'];
 }
 
-class Document {
+// ContentType string    `json:"contentType"`
+// Hash        []byte    `json:"hash"`
+// HashChain   [][]byte  `json:"hashChain"`
+// Tags        []string  `json:"tags"`
+
+class LibraryFile {
+  int id;
+  String name;
+  int size;
+  Uint8List hash;
+  DateTime modTime;
+  String authorId;
+
+  LibraryFile()
+      : id = 0,
+        name = "",
+        size = 0,
+        hash = Uint8List(0),
+        modTime = DateTime.now(),
+        authorId = "";
+
+  LibraryFile.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        size = json['size'],
+        hash = base64Decode(json['hash'] ?? ""),
+        modTime = DateTime.parse(json['modTime']),
+        authorId = json['authorId'];
+}
+
+class LibraryDocument {
   String name;
   String authorId;
   String localPath;
@@ -179,9 +209,9 @@ class Document {
   DocumentState state;
   Uint8List hash;
   List<Uint8List> hashChain;
-  List<Version> versions;
+  List<LibraryVersion> versions;
 
-  Document()
+  LibraryDocument()
       : name = "",
         authorId = "",
         localPath = "",
@@ -192,7 +222,7 @@ class Document {
         hashChain = [],
         versions = [];
 
-  Document.fromJson(Map<String, dynamic> json)
+  LibraryDocument.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         authorId = json['authorId'],
         localPath = json['localPath'],
@@ -204,13 +234,13 @@ class Document {
             .map((e) => base64Decode(e))
             .toList(),
         versions = dynamicToList(json['versions'])
-            .map((e) => Version.fromJson(e))
+            .map((e) => LibraryVersion.fromJson(e))
             .toList();
 }
 
 class LibraryList {
   String folder;
-  List<Document> documents;
+  List<LibraryDocument> documents;
   List<String> subfolders;
 
   LibraryList()
@@ -221,7 +251,7 @@ class LibraryList {
   LibraryList.fromJson(Map<String, dynamic> json)
       : folder = json['folder'],
         documents = dynamicToList(json['documents'])
-            .map((e) => Document.fromJson(e))
+            .map((e) => LibraryDocument.fromJson(e))
             .toList(),
         subfolders = dynamicToList(json['subfolders']);
 }

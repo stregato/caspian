@@ -1,4 +1,7 @@
+import 'dart:isolate';
+
 import 'package:caspian/apps/library/library_actions.dart';
+import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:caspian/safepool/safepool_def.dart' as sp;
@@ -33,7 +36,7 @@ class _LibraryState extends State<Library> {
 
   String _folder = "";
 
-  Color? colorForState(sp.Document d) {
+  Color? colorForState(sp.LibraryDocument d) {
     switch (d.state) {
       case sp.DocumentState.sync:
         return Colors.green;
@@ -50,7 +53,7 @@ class _LibraryState extends State<Library> {
     }
   }
 
-  Widget? subForState(sp.Document d) {
+  Widget? subForState(sp.LibraryDocument d) {
     switch (d.state) {
       case sp.DocumentState.sync:
         return null;
@@ -67,20 +70,42 @@ class _LibraryState extends State<Library> {
     }
   }
 
+  static Future<sp.LibraryList> _libraryList(
+      String poolName, String folder) async {
+    return Isolate.run<sp.LibraryList>(() => sp.libraryList(poolName, folder));
+  }
+
+  String _poolName = "";
+  bool _reload = true;
+  sp.LibraryList _list = sp.LibraryList();
+
   @override
   Widget build(BuildContext context) {
-    String poolName = "";
-
     final args = ModalRoute.of(context)!.settings.arguments;
     if (args is String) {
-      poolName = args;
+      if (_poolName != args) {
+        _poolName = args;
+      }
     } else if (args is LibraryArgs) {
-      poolName = args.poolName;
-      _folder = args.folder;
+      if (_poolName != args.poolName || _folder != args.folder) {
+        _poolName = args.poolName;
+        _folder = args.folder;
+      }
+    }
+    if (_reload) {
+      _reload = false;
+      Future.delayed(const Duration(milliseconds: 10), () async {
+        var list = await progressDialog<sp.LibraryList>(
+            context, "loading...", _libraryList(_poolName, _folder));
+        if (list != null) {
+          setState(() {
+            _list = list;
+          });
+        }
+      });
     }
 
-    var list = sp.libraryList(poolName, _folder);
-    var items = list.subfolders
+    var items = _list.subfolders
         .map(
           (e) => Card(
             child: ListTile(
@@ -88,6 +113,7 @@ class _LibraryState extends State<Library> {
               leading: const Icon(Icons.folder),
               onTap: () => setState(() {
                 _folder = _folder.isEmpty ? e : "$_folder/$e";
+                _reload = true;
               }),
             ),
           ),
@@ -95,7 +121,7 @@ class _LibraryState extends State<Library> {
         .toList();
 
     items.addAll(
-      list.documents
+      _list.documents
           .map(
             (d) => Card(
               child: ListTile(
@@ -106,7 +132,7 @@ class _LibraryState extends State<Library> {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   Navigator.pushNamed(context, "/apps/library/actions",
-                          arguments: LibraryActionsArgs(poolName, d))
+                          arguments: LibraryActionsArgs(_poolName, d))
                       .then((value) => setState(
                             () {},
                           ));
@@ -121,12 +147,13 @@ class _LibraryState extends State<Library> {
       BreadCrumbItem(
         content: RichText(
           text: TextSpan(
-            text: poolName,
+            text: _poolName,
             style: const TextStyle(color: Colors.blue),
             recognizer: TapGestureRecognizer()
               ..onTap = () => setState(
                     () {
                       _folder = "";
+                      _reload = true;
                     },
                   ),
           ),
@@ -148,12 +175,12 @@ class _LibraryState extends State<Library> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Library $poolName"),
+        title: Text("Library $_poolName"),
         actions: [
           ElevatedButton.icon(
             label: const Text("Reload"),
             onPressed: () {
-              setState(() {});
+              setState(() {_reload=true});
             },
             icon: const Icon(Icons.refresh),
           ),
@@ -174,7 +201,7 @@ class _LibraryState extends State<Library> {
                   getFile(context).then((s) {
                     if (s.valid) {
                       Navigator.pushNamed(context, "/apps/library/upload",
-                              arguments: UploadArgs(poolName, s))
+                              arguments: UploadArgs(_poolName, s))
                           .then((value) => setState(
                                 () {},
                               ));
@@ -192,7 +219,7 @@ class _LibraryState extends State<Library> {
           ),
         ]),
       ),
-      bottomNavigationBar: MainNavigationBar(poolName),
+      bottomNavigationBar: MainNavigationBar(_poolName),
     );
   }
 }

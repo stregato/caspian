@@ -29,7 +29,7 @@ class _SubPoolState extends State<SubPool> {
     if (_poolName == "") {
       _poolName = poolName;
       var pool = sp.poolGet(poolName);
-      var selfId = sp.getSelfId();
+      var selfId = sp.securitySelfId();
       _apps = {for (var e in pool.apps) e: true};
       _ids = {for (var i in sp.poolUsers(poolName)) i: i.id() == selfId};
     }

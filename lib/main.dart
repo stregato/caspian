@@ -18,7 +18,8 @@ void main() {
               : c == ConnectivityResult.wifi
                   ? "medium"
                   : "low";
-      start("$applicationFolder/.safepool.db", availableBandwidth);
+      start("$applicationFolder/.safepool.db", temporaryFolder,
+          availableBandwidth);
       runApp(const CaspianApp());
     });
   });

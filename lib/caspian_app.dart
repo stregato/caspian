@@ -16,6 +16,7 @@ import 'package:caspian/settings/settings.dart';
 import 'package:flutter/material.dart';
 
 class CaspianApp extends StatelessWidget {
+  //final Stream<Uri> _unilinkSub;
   const CaspianApp({super.key});
 
   // This widget is the root of your application.

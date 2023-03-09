@@ -1,9 +1,9 @@
 import 'dart:ffi' as ffi; // For FFI
 import 'dart:io'; // For Platform.isX
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:caspian/safepool/safepool_def.dart';
 import "package:ffi/ffi.dart";
+import 'package:flutter/foundation.dart';
 import 'safepool_platform_interface.dart';
 
 final ffi.DynamicLibrary lib = getLibrary();
@@ -13,7 +13,14 @@ ffi.DynamicLibrary getLibrary() {
     return ffi.DynamicLibrary.open('libsafepool.so');
   }
   if (Platform.isLinux) {
-    return ffi.DynamicLibrary.open('linux/libs/amd64/libsafepool.so');
+    if (kDebugMode) {
+      return ffi.DynamicLibrary.open('linux/libs/amd64/libsafepool.so');
+    } else {
+      try {
+        return ffi.DynamicLibrary.open('libsafepool.so');
+      } catch (_) {}
+      return ffi.DynamicLibrary.open('/usr/lib/libsafepool.so');
+    }
   }
   return ffi.DynamicLibrary.process();
 }
@@ -91,22 +98,45 @@ class CException implements Exception {
   }
 }
 
-typedef Start = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-void start(String dbPath, String availableBandwith) {
+typedef Start = CResult Function(
+    ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+void start(String dbPath, String cacheFolder, String availableBandwith) {
   var startC = lib.lookupFunction<Start, Start>("start");
-  startC(dbPath.toNativeUtf8(), availableBandwith.toNativeUtf8()).unwrapVoid();
+  startC(dbPath.toNativeUtf8(), cacheFolder.toNativeUtf8(),
+          availableBandwith.toNativeUtf8())
+      .unwrapVoid();
 }
 
-typedef GetSelfId = CResult Function();
-String getSelfId() {
-  var getSelfIdC = lib.lookupFunction<GetSelfId, GetSelfId>("getSelfId");
-  return getSelfIdC().unwrapString();
+typedef Stop = CResult Function();
+void stop() {
+  var fun = lib.lookupFunction<Stop, Stop>("stop");
+  fun().unwrapVoid();
+}
+
+typedef FactoryReset = CResult Function();
+void factoryReset() {
+  var fun = lib.lookupFunction<FactoryReset, FactoryReset>("factoryReset");
+  fun().unwrapVoid();
+}
+
+typedef SecuritySelfId = CResult Function();
+String securitySelfId() {
+  var fun =
+      lib.lookupFunction<SecuritySelfId, SecuritySelfId>("securitySelfId");
+  return fun().unwrapString();
+}
+
+typedef SecurityIdentityFromId = CResult Function(ffi.Pointer<Utf8>);
+String securityIdentityFromId(String id) {
+  var fun = lib.lookupFunction<SecurityIdentityFromId, SecurityIdentityFromId>(
+      "securitySelfId");
+  return fun(id.toNativeUtf8()).unwrapString();
 }
 
 typedef PoolList = CResult Function();
 List<String> poolList() {
-  var poolListC = lib.lookupFunction<PoolList, PoolList>("poolList");
-  return poolListC().unwrapList().map((e) => e as String).toList();
+  var fun = lib.lookupFunction<PoolList, PoolList>("poolList");
+  return fun().unwrapList().map((e) => e as String).toList();
 }
 
 typedef PoolCreate = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
@@ -176,7 +206,7 @@ Invite poolParseInvite(String token) {
 typedef ChatReceiveC = CResult Function(
     ffi.Pointer<Utf8>, ffi.Int64, ffi.Int64, ffi.Int32);
 typedef ChatReceive = CResult Function(ffi.Pointer<Utf8>, int, int, int);
-List<Message> chatReceive(
+List<ChatMessage> chatReceive(
     String poolName, DateTime after, DateTime before, int limit) {
   var getMessagesC =
       lib.lookupFunction<ChatReceiveC, ChatReceive>("chatReceive");
@@ -184,7 +214,7 @@ List<Message> chatReceive(
           before.microsecondsSinceEpoch, limit)
       .unwrapList();
 
-  return m.map((e) => Message.fromJson(e as Map<String, dynamic>)).toList();
+  return m.map((e) => ChatMessage.fromJson(e as Map<String, dynamic>)).toList();
 }
 
 typedef ChatSend = CResult Function(
@@ -212,18 +242,27 @@ LibraryList libraryList(String poolName, String folder) {
   return LibraryList.fromJson(m);
 }
 
+typedef LibraryFindC = CResult Function(ffi.Pointer<Utf8>, ffi.Int);
+typedef LibraryFindD = CResult Function(ffi.Pointer<Utf8>, int);
+LibraryFile libraryFind(String poolName, int id) {
+  var fun = lib.lookupFunction<LibraryFindC, LibraryFindD>("libraryFind");
+  var m = fun(poolName.toNativeUtf8(), id).unwrapMap();
+
+  return LibraryFile.fromJson(m);
+}
+
 // librarySend(poolName *C.char, localPath *C.char, name *C.char, solveConflicts C.int, tagsList *C.char) C.Result {
 typedef LibrarySendC = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>,
     ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>);
 typedef LibrarySendD = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>,
     ffi.Pointer<Utf8>, int, ffi.Pointer<Utf8>);
-void librarySend(String poolName, String localPath, String name,
+LibraryFile librarySend(String poolName, String localPath, String name,
     bool solveConflicts, List<String> tags) {
   var librarySendC =
       lib.lookupFunction<LibrarySendC, LibrarySendD>("librarySend");
   var m = librarySendC(poolName.toNativeUtf8(), localPath.toNativeUtf8(),
       name.toNativeUtf8(), solveConflicts ? 1 : 0, "[]".toNativeUtf8());
-  m.unwrapVoid();
+  return LibraryFile.fromJson(m.unwrapMap());
 }
 
 // libraryReceive(poolName *C.char, id C.long, localPath *C.char) C.Result

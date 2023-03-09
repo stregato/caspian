@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:file_selector/file_selector.dart' as fs;
+//import 'package:file_selector/file_selector.dart' as fs;
 import 'package:flutter/material.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 // ignore: import_of_legacy_library_into_null_safe
@@ -106,22 +106,23 @@ Future<FileSelection> getFile(BuildContext context) async {
   //   return FileSelection(v ?? "", v ?? "", false);
   // });
 
-  if (Platform.isAndroid) {
-    return FilePicker.platform.pickFiles().then<FileSelection>((v) {
-      if (v == null || v.count != 1) {
-        return FileSelection.cancel();
-      } else {
-        var f = v.files[0];
-        return FileSelection(f.name, f.path ?? f.name, true);
-      }
-    });
-  } else {
-    return fs.openFile().then<FileSelection>((v) {
-      if (v == null) {
-        return FileSelection.cancel();
-      } else {
-        return FileSelection(v.name, v.path, false);
-      }
-    });
-  }
+//  if (Platform.isAndroid) {
+  return FilePicker.platform.pickFiles().then<FileSelection>((v) {
+    if (v == null || v.count != 1) {
+      return FileSelection.cancel();
+    } else {
+      var f = v.files[0];
+      return FileSelection(f.name, f.path ?? f.name, true);
+    }
+  });
+//    });
+//  } else {
+  // return fs.openFile().then<FileSelection>((v) {
+  //   if (v == null) {
+  //     return FileSelection.cancel();
+  //   } else {
+  //     return FileSelection(v.name, v.path, false);
+  //   }
+  // });
+  //}
 }

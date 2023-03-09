@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:file_selector/file_selector.dart';
+//import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:share_plus/share_plus.dart';
@@ -17,10 +17,12 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   static String _logLevel = "Error";
 
+  int _fullReset = 5;
+
   @override
   Widget build(BuildContext context) {
     final buttonStyle = ButtonStyle(
-      padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(20)),
+      padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(14)),
     );
 
     final logLevels = {
@@ -112,10 +114,10 @@ class _SettingsState extends State<Settings> {
                           Share.shareXFiles([file],
                               subject: "Dump from Caspian");
                         } else {
-                          getSavePath(suggestedName: "safepool.log")
-                              .then((value) {
-                            File(value!).writeAsString(logs);
-                          });
+                          // getSavePath(suggestedName: "safepool.log")
+                          //     .then((value) {
+                          //   File(value!).writeAsString(logs);
+                          // });
                         }
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -129,6 +131,32 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
+            const SizedBox(
+              height: 14,
+            ),
+            ElevatedButton.icon(
+                style: buttonStyle,
+                label: Text("Factory Reset (click $_fullReset times)"),
+                icon: const Icon(Icons.restore),
+                onPressed: () => setState(() {
+                      if (_fullReset == 0) {
+                        sp.factoryReset();
+                        _fullReset = 5;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                backgroundColor: Colors.green,
+                                content:
+                                    Text("Full Reset completed! Good luck")));
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                      } else {
+                        _fullReset--;
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            duration: const Duration(milliseconds: 300),
+                            content:
+                                Text("$_fullReset clicks to factory reset!")));
+                      }
+                    })),
           ],
         ),
       ),

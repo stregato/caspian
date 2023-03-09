@@ -1,10 +1,6 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:isolate';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 Future<T?> progressDialog<T>(
     BuildContext context, String message, Future<T> task,

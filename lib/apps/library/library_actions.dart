@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data';
 
 import 'package:caspian/common/const.dart';
 import 'package:caspian/common/document.dart';
@@ -25,7 +26,7 @@ class LibraryActions extends StatefulWidget {
 
 class LibraryActionsArgs {
   String pool;
-  sp.Document document;
+  sp.LibraryDocument document;
   LibraryActionsArgs(this.pool, this.document);
 }
 
@@ -76,6 +77,7 @@ class _LibraryActionsState extends State<LibraryActions> {
           ),
         ),
       );
+
       if (isDesktop) {
         items.add(
           Card(
@@ -188,6 +190,7 @@ class _LibraryActionsState extends State<LibraryActions> {
                     context,
                     Document(path.join(downloadFolder, path.basename(d.name)),
                         size: v.size, time: v.modTime),
+                    canChoose: isDesktop,
                   );
                   if (context.mounted && target != null) {
                     var name = path.basename(target);
@@ -248,6 +251,18 @@ class _LibraryActionsState extends State<LibraryActions> {
         ),
       );
     }
+
+    items.add(
+      Card(
+        child: ListTile(
+          title: const Text("Pop on chat"),
+          leading: const Icon(Icons.delete),
+          onTap: () {
+            sp.chatSend(poolName, "", "library:/${d.name}", Uint8List(0));
+          },
+        ),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text("Library $poolName"),

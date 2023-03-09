@@ -88,10 +88,12 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern Result start(char* dbPath, char* availableBandwith);
+extern Result start(char* dbPath, char* cachePath, char* availableBandwith);
 extern Result stop();
-extern Result getSelfId();
-extern Result getSelf();
+extern Result factoryReset();
+extern Result securitySelfId();
+extern Result securitySelf();
+extern Result securityIdentityFromId(char* id);
 extern Result poolList();
 extern Result poolCreate(char* config, char* apps);
 extern Result poolJoin(char* token);
@@ -104,7 +106,9 @@ extern Result poolParseInvite(char* token);
 extern Result chatReceive(char* poolName, long after, long before, int limit);
 extern Result chatSend(char* poolName, char* contentType, char* text, char* binary);
 extern Result libraryList(char* poolName, char* folder);
+extern Result libraryFind(char* poolName, long id);
 extern Result libraryReceive(char* poolName, long id, char* localPath);
+extern Result librarySave(char* poolName, long id, char* localPath);
 extern Result librarySend(char* poolName, char* localPath, char* name, int solveConflicts, char* tagsList);
 extern Result inviteReceive(char* poolName, int after, int onlyMine);
 extern Result notifications(long ctime);

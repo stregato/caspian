@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:caspian/common/document.dart';
-import 'package:file_selector/file_selector.dart';
+//import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as pl;
 
@@ -74,22 +74,22 @@ class _ChooseFileState extends State<ChooseFile> {
             if (widget.canChoose)
               ElevatedButton(
                 onPressed: () {
-                  getSavePath(
-                          initialDirectory: parent.path, suggestedName: _target)
-                      .then((value) {
-                    if (value != null) {
-                      setState(() {
-                        _target = value;
-                        saveTo.text = value;
-                      });
-                    }
-                  }).catchError((e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text(
-                          "Cannot set target: $e",
-                        )));
-                  });
+                  // getSavePath(
+                  //         initialDirectory: parent.path, suggestedName: _target)
+                  //     .then((value) {
+                  //   if (value != null) {
+                  //     setState(() {
+                  //       _target = value;
+                  //       saveTo.text = value;
+                  //     });
+                  //   }
+                  // }).catchError((e) {
+                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  //       backgroundColor: Colors.red,
+                  //       content: Text(
+                  //         "Cannot set target: $e",
+                  //       )));
+                  // });
                 },
                 child: const Text("Choose"),
               ),

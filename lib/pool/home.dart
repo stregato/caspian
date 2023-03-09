@@ -1,10 +1,13 @@
-import 'dart:io';
+import 'dart:async';
 import 'dart:isolate';
 
+import 'package:caspian/common/const.dart';
 import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:flutter/material.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:flutter/services.dart' show PlatformException;
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,46 +16,51 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-void waitDialog<T>(
-    BuildContext context, String message, String error, Function f,
-    [bool mounted = true]) async {
-  showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) {
-        return Dialog(
-          // The background color
-          backgroundColor: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // The loading indicator
-                const CircularProgressIndicator(),
-                const SizedBox(
-                  height: 15,
-                ),
-                // Some text
-                Text(message)
-              ],
-            ),
-          ),
-        );
-      });
-  try {
-    await Isolate.run(f());
-    if (!mounted) return null;
-    Navigator.of(context).pop();
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(backgroundColor: Colors.red, content: Text(error)));
-    Navigator.of(context).pop();
-  }
-  return null;
-}
-
 class _HomeState extends State<Home> {
+  static StreamSubscription<Uri?>? linkSub;
+  Uri? _unilink;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!isDesktop && linkSub == null) {
+      try {
+        getInitialUri().then((uri) {
+          _unilink = uri;
+          linkSub = uriLinkStream.listen((uri) => setState(() {
+                _unilink = uri;
+              }));
+        });
+      } on PlatformException {
+        //platform does not support
+      }
+    }
+  }
+
+  void _processUnilink(BuildContext context) {
+    if (_unilink == null) {
+      return;
+    }
+
+    setState(() {
+      var segments = _unilink!.pathSegments;
+      switch (segments[0]) {
+        case "invite":
+          if (segments.length == 2) {
+            var token = Uri.decodeComponent(segments[1]);
+            Future.delayed(
+                const Duration(milliseconds: 100),
+                () => Navigator.pushNamed(context, "/addPool/import",
+                    arguments: token));
+          }
+          break;
+        case "id":
+          break;
+      }
+      _unilink = null;
+    });
+  }
+
   Future<Object?> openPool(BuildContext context, String pool,
       [bool mounted = true]) async {
     var p =
@@ -67,14 +75,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    _processUnilink(context);
+
     var poolList = sp.poolList();
     var widgets = poolList.map(
       (e) {
         var parts = e.split("/");
         String name;
         String sub;
-        if (parts.length > 2 && parts[parts.length - 2] == '@') {
-          name = parts.sublist(0, parts.length - 2).join('/');
+        if (parts.length > 1 && parts.last.startsWith('#')) {
+          name = parts.sublist(0, parts.length - 1).join('/');
           sub = parts.last;
         } else {
           name = e;

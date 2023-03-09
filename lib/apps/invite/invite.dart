@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:caspian/navigation/bar.dart';
-import 'package:caspian/safepool/safepool.dart';
+import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
@@ -64,99 +64,121 @@ class _InviteState extends State<Invite> {
           ),
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            ListView(
-              shrinkWrap: true,
-              children: _ids
-                  .map(
-                    (id) => Card(
-                      child: ListTile(
-                        title: Text(id),
-                        trailing: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _ids.remove(id);
-                            });
-                          },
-                          icon: const Icon(Icons.delete),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            Builder(
-              builder: (context) => Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextFormField(
-                      maxLines: 2,
-                      controller: idController,
-                      decoration: InputDecoration(
-                        labelText: 'Enter the id',
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            if (idController.text.isNotEmpty) {
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              ListView(
+                shrinkWrap: true,
+                children: _ids
+                    .map(
+                      (id) => Card(
+                        child: ListTile(
+                          title: Text(id),
+                          trailing: IconButton(
+                            onPressed: () {
                               setState(() {
-                                _ids.add(idController.text);
-                                idController.clear();
+                                _ids.remove(id);
                               });
-                            }
-                          },
-                          icon: const Icon(Icons.add),
+                            },
+                            icon: const Icon(Icons.delete),
+                          ),
                         ),
                       ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: 16.0),
-                      child: ElevatedButton(
-                        onPressed: _ids.isNotEmpty
-                            ? () {
+                    )
+                    .toList(),
+              ),
+              Builder(
+                builder: (context) => Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextFormField(
+                        maxLines: 2,
+                        controller: idController,
+                        decoration: InputDecoration(
+                          labelText: 'Enter the id',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              if (idController.text.isNotEmpty) {
                                 setState(() {
-                                  try {
-                                    _token = poolInvite(poolName, _ids, "");
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                            content: Text(
-                                      "Share the token with your peers",
-                                    )));
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            backgroundColor: Colors.red,
-                                            content: Text(
-                                              "Generation failsed: $e",
-                                            )));
-                                  }
+                                  _ids.add(idController.text);
+                                  idController.clear();
                                 });
                               }
-                            : null,
-                        child: const Text('Create'),
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value.length == 88) {
+                            try {
+                              sp.securityIdentityFromId(value);
+                              setState(() {
+                                _ids.add(value);
+                                idController.clear();
+                              });
+                            } catch (e) {
+                              //invalid id
+                            }
+                          }
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
-                    ),
-                  ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 16.0),
+                        child: ElevatedButton(
+                          onPressed: _ids.isNotEmpty
+                              ? () {
+                                  setState(() {
+                                    try {
+                                      _token =
+                                          sp.poolInvite(poolName, _ids, "");
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                        "Share the token with your peers",
+                                      )));
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                "Generation failsed: $e",
+                                              )));
+                                    }
+                                  });
+                                }
+                              : null,
+                          child: const Text('Create'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text("Generated Invite"),
-            Text(_token,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontWeight: FontWeight.bold,
-                )),
-            const SizedBox(height: 20),
-            shareButton,
-          ],
+              const SizedBox(height: 20),
+              Text("Invite for $poolName"),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                  _token.length < 128
+                      ? _token
+                      : "${_token.substring(0, 128)}...",
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontWeight: FontWeight.bold,
+                  )),
+              const SizedBox(height: 20),
+              shareButton,
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: MainNavigationBar(poolName),

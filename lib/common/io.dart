@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:caspian/common/download.dart';
-import 'package:caspian/common/progress.dart';
 
 import './document.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +12,8 @@ enum Type { library, downloads }
 late String applicationFolder;
 late String documentsFolder;
 late String downloadFolder;
+late String picturesFolder;
+late String temporaryFolder;
 
 Future<void> initFolders() async {
   var dir = await getApplicationSupportDirectory();
@@ -21,6 +21,9 @@ Future<void> initFolders() async {
 
   dir = await getApplicationDocumentsDirectory();
   documentsFolder = dir.path;
+
+  dir = await getTemporaryDirectory();
+  temporaryFolder = dir.path;
 
   if (Platform.isIOS) {
     downloadFolder = (await getDownloadsDirectory())!.path;
@@ -33,11 +36,15 @@ Future<void> initFolders() async {
     } else {
       downloadFolder = "/storage/emulated/0/Downloads/";
     }
+    picturesFolder = downloadFolder;
   } else if (Platform.isLinux || Platform.isMacOS) {
     downloadFolder = path.join(Platform.environment['HOME']!, "Downloads");
+    picturesFolder = path.join(Platform.environment['HOME']!, "Pictures");
   } else {
     downloadFolder =
         path.join(Platform.environment['USERPROFILE']!, "Downloads");
+    picturesFolder =
+        path.join(Platform.environment['USERPROFILE']!, "Pictures");
   }
 }
 

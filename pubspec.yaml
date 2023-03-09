@@ -46,9 +46,9 @@ dependencies:
   basic_utils: ^5.4.2
   share_plus: ^6.3.0
   flutter_breadcrumb: ^1.0.1
-  file_selector: ^0.9.2+2
+#  file_selector: ^0.9.2+2
   file_picker: ^5.2.5
-  filesystem_picker: ^3.1.0
+  
   dynamic_treeview: ^1.0.0+2
   yaru: ^0.5.3
   file_icon: ^1.0.0
@@ -60,6 +60,9 @@ dependencies:
   flutter_chat_types: ^3.6.0
   image_picker: ^0.8.6+4
   mime: ^1.0.4
+  flutter_html: ^3.0.0-alpha.6
+  http: ^0.13.5
+  uni_links: ^0.5.1
 
 dev_dependencies:
   flutter_test:
