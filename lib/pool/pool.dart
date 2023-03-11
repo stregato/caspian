@@ -6,6 +6,7 @@ import '../navigation/bar.dart';
 
 var appsIcons = {
   "chat": Icons.chat,
+  "private": Icons.question_answer,
   "library": Icons.folder,
   "invite": Icons.token,
 };

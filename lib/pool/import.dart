@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:isolate';
 
-import 'package:caspian/safepool/safepool.dart';
+import 'package:caspian/common/pop.dart';
+import 'package:caspian/common/progress.dart';
+import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +26,7 @@ class _ImportPoolState extends State<ImportPool> {
   void _updateToken(String? value) {
     _token = value;
     try {
-      var i = poolParseInvite(_token!);
+      var i = sp.poolParseInvite(_token!);
       if (i.config != null) {
         _validateMessage = i.subject == ""
             ? "Invite to ${i.config?.name} by ${i.sender.nick}"
@@ -42,9 +45,11 @@ class _ImportPoolState extends State<ImportPool> {
     }
   }
 
+  static poolJoin(String token) => Isolate.run(() => sp.poolJoin(token));
+
   @override
   Widget build(BuildContext context) {
-    var selfId = securitySelfId();
+    var selfId = sp.securitySelfId();
 
     _token ??= ModalRoute.of(context)?.settings.arguments as String?;
     _updateToken(_token);
@@ -130,22 +135,15 @@ class _ImportPoolState extends State<ImportPool> {
                           vertical: 16.0, horizontal: 16.0),
                       child: ElevatedButton(
                         onPressed: _validToken
-                            ? () {
-                                try {
-                                  var config = poolJoin(_token!);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                          content: Text(
-                                    "Congrats! You successfully joined ${config.name}",
-                                  )));
-                                  Navigator.pop(context);
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                            "Invalid token: $e",
-                                          )));
+                            ? () async {
+                                var config = await progressDialog(
+                                    context,
+                                    "dressing the suit, please wait",
+                                    poolJoin(_token!),
+                                    errorMessage: "wow, something went wrong");
+                                if (config != null && context.mounted) {
+                                  snackGood(context,
+                                      "congrats! you successfully joined ${config.name}");
                                 }
                               }
                             : null,

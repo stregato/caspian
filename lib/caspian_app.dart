@@ -1,4 +1,5 @@
 import 'package:caspian/apps/chat/chat.dart';
+import 'package:caspian/apps/private/private.dart';
 import 'package:caspian/apps/invite/invite.dart';
 import 'package:caspian/apps/invite/invite_list.dart';
 import 'package:caspian/apps/library/library.dart';
@@ -38,6 +39,7 @@ class CaspianApp extends StatelessWidget {
         "/pool/sub": (context) => const SubPool(),
         "/pool/settings": (context) => const PoolSettings(),
         "/apps/chat": (context) => const Chat(),
+        "/apps/private": (context) => const Private(),
         "/apps/library": (context) => const Library(),
         "/apps/library/upload": (context) => const UploadFile(),
 //        "/apps/library/download": (context) => const DownloadFile(),

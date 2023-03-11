@@ -1,5 +1,8 @@
-import 'package:caspian/safepool/safepool.dart';
-import 'package:caspian/safepool/safepool_def.dart';
+import 'dart:isolate';
+
+import 'package:caspian/common/progress.dart';
+import 'package:caspian/safepool/safepool.dart' as sp;
+import 'package:caspian/safepool/safepool_def.dart' as sp;
 import 'package:flutter/material.dart';
 import 'package:basic_utils/basic_utils.dart';
 
@@ -17,7 +20,7 @@ const availableApps = ["chat", "library", "gallery"];
 class _CreatePoolState extends State<CreatePool> {
   final _formKey = GlobalKey<FormState>();
 
-  final _config = Config();
+  final _config = sp.Config();
   final _appsMap = {for (var e in availableApps) e: true};
   String? _publicExchange;
   String? _privateExchange;
@@ -47,6 +50,9 @@ class _CreatePoolState extends State<CreatePool> {
 
   final _publicController = TextEditingController();
   final _privateController = TextEditingController();
+
+  static _poolCreate(sp.Config config, List<String> apps) =>
+      Isolate.run(() => sp.poolCreate(config, apps));
 
   @override
   Widget build(BuildContext context) {
@@ -161,27 +167,18 @@ class _CreatePoolState extends State<CreatePool> {
                       vertical: 16.0, horizontal: 16.0),
                   child: ElevatedButton(
                     onPressed: _validConfig()
-                        ? () {
+                        ? () async {
                             List<String> apps = [];
                             _appsMap.forEach((key, value) {
                               if (value) apps.add(key);
                             });
-                            try {
-                              poolCreate(_config, apps);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Text(
-                                "Congrats! You successfully created ${_config.name}",
-                              )));
-                              Navigator.pop(context);
-                            } catch (e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Text(
-                                        "Creation failed: $e",
-                                      )));
-                            }
+                            await progressDialog(
+                                context,
+                                "filling the pool, please wait",
+                                _poolCreate(_config, apps),
+                                successMessage:
+                                    "Congrats! You successfully created ${_config.name}",
+                                errorMessage: "Creation failed");
                           }
                         : null,
                     child: const Text('Create'),

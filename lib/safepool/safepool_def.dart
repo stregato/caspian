@@ -77,7 +77,7 @@ class Pool {
 
   Pool.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        apps = json['apps'] ?? ['chat', 'library', 'invite'],
+        apps = json['apps'] ?? ['chat', 'private', 'library', 'invite'],
         self = Identity.fromJson(json['self']),
         trusted = json['trusted'],
         connection = json['connection'];
@@ -87,6 +87,8 @@ class Pool {
         'apps': apps,
       };
 }
+
+typedef ChatPrivate = List<String>;
 
 class ChatMessage {
   String id;

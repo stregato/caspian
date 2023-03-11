@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:caspian/safepool/safepool.dart';
 import 'package:flutter/material.dart';
 
 Future<T?> progressDialog<T>(
     BuildContext context, String message, Future<T> task,
     {String? successMessage,
     String? errorMessage,
-    Function()? getProgress}) async {
+    Function()? getProgress,
+    bool catchException = true}) async {
   return showDialog(
       context: context,
       builder: (_) => FutureBuilder(
@@ -15,8 +17,8 @@ Future<T?> progressDialog<T>(
                 Navigator.pop(context, snapshot.data);
                 return Container();
               } else if (snapshot.hasError) {
-                Navigator.pop(context);
-                throw snapshot.error!;
+                Navigator.pop(context, snapshot.error);
+                return Container();
               } else if (snapshot.connectionState == ConnectionState.done) {
                 Navigator.pop(context);
                 return Container();
@@ -32,6 +34,18 @@ Future<T?> progressDialog<T>(
     }
     return null;
   }).then((value) {
+    if (value is CException) {
+      if (errorMessage != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text("$errorMessage: $value")));
+      }
+      if (catchException) {
+        return null;
+      } else {
+        throw value;
+      }
+    }
     if (successMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green, content: Text(successMessage)));

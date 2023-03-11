@@ -36,6 +36,12 @@ class _LibraryState extends State<Library> {
 
   String _folder = "";
 
+  @override
+  void dispose() {
+    super.dispose();
+    _reload = true;
+  }
+
   Color? colorForState(sp.LibraryDocument d) {
     switch (d.state) {
       case sp.DocumentState.sync:
@@ -180,7 +186,9 @@ class _LibraryState extends State<Library> {
           ElevatedButton.icon(
             label: const Text("Reload"),
             onPressed: () {
-              setState(() {_reload=true});
+              setState(() {
+                _reload = true;
+              });
             },
             icon: const Icon(Icons.refresh),
           ),

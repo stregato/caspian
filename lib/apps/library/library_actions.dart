@@ -258,7 +258,7 @@ class _LibraryActionsState extends State<LibraryActions> {
           title: const Text("Pop on chat"),
           leading: const Icon(Icons.delete),
           onTap: () {
-            sp.chatSend(poolName, "", "library:/${d.name}", Uint8List(0));
+            sp.chatSend(poolName, "", "library:/${d.name}", Uint8List(0), []);
           },
         ),
       ),

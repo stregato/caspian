@@ -20,6 +20,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as ph;
 
+class ChatArgs {
+  String poolName;
+  sp.ChatPrivate private;
+  ChatArgs(this.poolName, this.private);
+}
+
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
 
@@ -30,19 +36,22 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   final List<types.Message> _messages = [];
   String _poolName = "";
-  DateTime _after = DateTime.fromMicrosecondsSinceEpoch(0);
-  DateTime _before = DateTime.fromMicrosecondsSinceEpoch(0);
+  sp.ChatPrivate _private = [];
+  DateTime _from = DateTime.fromMicrosecondsSinceEpoch(0);
+  DateTime _to = DateTime.fromMicrosecondsSinceEpoch(0);
   Timer? timer;
   DateTime _lastMessage = DateTime.now();
   late types.User _currentUser;
   final Map<String, types.User> _users = {};
   final Set<String> _loaded = {};
+  final double _pageThresold = isDesktop ? 40 : 20;
+  bool _isLastPage = false;
 
   @override
   void initState() {
     super.initState();
     timer = Timer.periodic(
-      const Duration(seconds: 20),
+      const Duration(seconds: 3),
       (Timer t) {
         var diff = DateTime.now().difference(_lastMessage).inSeconds;
         if (diff < 20 || diff > 50) {
@@ -149,17 +158,19 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  static _chatReceive(String poolName, DateTime after, DateTime before) {
-    return Isolate.run<List<sp.ChatMessage>>(
-        () => sp.chatReceive(poolName, after, before, isDesktop ? 40 : 20));
+  static _chatReceive(String poolName, DateTime after, DateTime before,
+      sp.ChatPrivate private) {
+    return Isolate.run<List<sp.ChatMessage>>(() =>
+        sp.chatReceive(poolName, after, before, isDesktop ? 40 : 20, private));
   }
 
   _loadMoreMessages([bool showProgress = false]) async {
-    _before = DateTime.now();
     var messages = showProgress
-        ? await progressDialog<List<sp.ChatMessage>>(context,
-            "Getting messages", _chatReceive(_poolName, _after, _before))
-        : _chatReceive(_poolName, _after, _before);
+        ? await progressDialog<List<sp.ChatMessage>>(
+            context,
+            "Getting messages",
+            _chatReceive(_poolName, _from, DateTime.now(), _private))
+        : sp.chatReceive(_poolName, _to, DateTime.now(), 100, _private);
     if (messages == null || messages.isEmpty) {
       return;
     }
@@ -170,30 +181,18 @@ class _ChatState extends State<Chat> {
           _loaded.add(m.id);
         }
       }
-      _after = messages.last.time;
+      _isLastPage =
+          _from.millisecondsSinceEpoch == 0 && messages.length < _pageThresold;
+      if (_from.microsecondsSinceEpoch == 0) {
+        _from = messages.first.time;
+      }
+      _to = messages.last.time;
       _lastMessage = DateTime.now();
     });
   }
 
   Widget _customMessageBuilder(types.CustomMessage message,
       {required int messageWidth}) {
-    // const theme = chat.DarkChatTheme();
-    // final bodyLinkTextStyle = _currentUser.id == message.author.id
-    //     ? theme.sentMessageBodyLinkTextStyle
-    //     : theme.receivedMessageBodyLinkTextStyle;
-    // final bodyTextStyle = _currentUser.id == message.author.id
-    //     ? theme.sentMessageBodyTextStyle
-    //     : theme.receivedMessageBodyTextStyle;
-    // final boldTextStyle = _currentUser.id == message.author.id
-    //     ? theme.sentMessageBodyBoldTextStyle
-    //     : theme.receivedMessageBodyBoldTextStyle;
-    // final codeTextStyle = _currentUser.id == message.author.id
-    //     ? theme.sentMessageBodyCodeTextStyle
-    //     : theme.receivedMessageBodyCodeTextStyle;
-    // final emojiTextStyle = _currentUser.id == message.author.id
-    //     ? theme.sentEmojiMessageTextStyle
-    //     : theme.receivedEmojiMessageTextStyle;
-
     var mime = message.metadata?['mime'];
     switch (mime) {
       case 'text/html':
@@ -218,47 +217,108 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    final poolName = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)!.settings.arguments;
+    if (args is String) {
+      if (_poolName != args) {
+        _poolName = args;
+      }
+    } else if (args is ChatArgs) {
+      if (_poolName != args.poolName) {
+        _poolName = args.poolName;
+        _private = args.private;
+      }
+    }
 
-    if (_poolName.isEmpty) {
-      _poolName = poolName;
+    if (_users.isEmpty) {
       _setUsers();
       Future.delayed(
           const Duration(milliseconds: 10), () => _loadMoreMessages(true));
     }
 
+    var title = _private.isEmpty ? "Chat $_poolName" : "Private $_poolName";
+
+    var privateChips = _private
+        .map((e) => _users[e]?.firstName!)
+        .where((e) => e != null)
+        .map((e) => Chip(
+              avatar: CircleAvatar(
+                backgroundColor: Colors.grey.shade800,
+                child: Text(e!.substring(0, 1)),
+              ),
+              label: Text(e),
+            ))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat $poolName"),
+        title: Text(title),
         actions: [
           ElevatedButton.icon(
             label: const Text("Sub"),
             onPressed: () {
-              Navigator.pushNamed(context, "/pool/sub", arguments: poolName);
+              Navigator.pushNamed(context, "/pool/sub", arguments: _poolName);
             },
             icon: const Icon(Icons.child_care),
           ),
         ],
       ),
-      body: chat.Chat(
-        messages: _messages,
-        onAttachmentPressed: () {
-          _handleAttachmentPressed(context);
-        },
-        onMessageTap: _handleMessageTap,
-        onPreviewDataFetched: _handlePreviewDataFetched,
-        onSendPressed: _handleSendPressed,
-        showUserAvatars: true,
-        showUserNames: true,
-        user: _currentUser,
-        customMessageBuilder: _customMessageBuilder,
+      body: Column(
+        children: [
+          Card(
+            child: Row(
+              children: privateChips,
+            ),
+          ),
+          Expanded(
+            child: chat.Chat(
+              messages: _messages,
+              onAttachmentPressed: () {
+                _handleAttachmentPressed(context);
+              },
+              onMessageTap: _handleMessageTap,
+              onPreviewDataFetched: _handlePreviewDataFetched,
+              onSendPressed: _handleSendPressed,
+              onEndReached: _handleEndReached,
+              // onEndReachedThreshold: _pageThresold,
+              isLastPage: _isLastPage,
+              showUserAvatars: true,
+              showUserNames: true,
+              user: _currentUser,
+              customMessageBuilder: _customMessageBuilder,
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: MainNavigationBar(poolName),
+      bottomNavigationBar: MainNavigationBar(_poolName),
     );
   }
 
+  Future<void> _handleEndReached() async {
+    var after = DateTime.fromMicrosecondsSinceEpoch(0);
+    var before = _from;
+    var messages = await progressDialog<List<sp.ChatMessage>>(context,
+        "Getting messages", _chatReceive(_poolName, after, before, _private));
+
+    setState(() {
+      if (messages == null || messages.isEmpty) {
+        _isLastPage = true;
+        return;
+      }
+
+      for (var m in messages.reversed) {
+        if (!_loaded.contains(m.id)) {
+          _messages.add(_convert(m));
+          _loaded.add(m.id);
+        }
+      }
+      _isLastPage = messages.length < _pageThresold;
+      _from = messages.first.time;
+    });
+  }
+
   void _handleSendPressed(types.PartialText message) {
-    var id = sp.chatSend(_poolName, "text/plain", message.text, Uint8List(0));
+    var id = sp.chatSend(
+        _poolName, "text/plain", message.text, Uint8List(0), _private);
 
     final textMessage = types.TextMessage(
       author: _currentUser,
@@ -327,7 +387,7 @@ class _ChatState extends State<Chat> {
       final mimeType = lookupMimeType(localPath);
 
       var uri = "library:/uploads/$name";
-      var id = sp.chatSend(_poolName, mimeType!, uri, Uint8List(0));
+      var id = sp.chatSend(_poolName, mimeType!, uri, Uint8List(0), _private);
 
       final message = types.FileMessage(
         author: _currentUser,
@@ -371,8 +431,8 @@ class _ChatState extends State<Chat> {
       final image = await decodeImageFromList(bytes);
 
       final mimeType = lookupMimeType(xfile.path);
-      var id =
-          sp.chatSend(_poolName, mimeType ?? "image/jpeg", xfile.name, bytes);
+      var id = sp.chatSend(
+          _poolName, mimeType ?? "image/jpeg", xfile.name, bytes, _private);
 
       final message = types.ImageMessage(
         author: _currentUser,

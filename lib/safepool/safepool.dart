@@ -204,32 +204,45 @@ Invite poolParseInvite(String token) {
 }
 
 typedef ChatReceiveC = CResult Function(
-    ffi.Pointer<Utf8>, ffi.Int64, ffi.Int64, ffi.Int32);
-typedef ChatReceive = CResult Function(ffi.Pointer<Utf8>, int, int, int);
-List<ChatMessage> chatReceive(
-    String poolName, DateTime after, DateTime before, int limit) {
+    ffi.Pointer<Utf8>, ffi.Int64, ffi.Int64, ffi.Int32, ffi.Pointer<Utf8>);
+typedef ChatReceive = CResult Function(
+    ffi.Pointer<Utf8>, int, int, int, ffi.Pointer<Utf8>);
+List<ChatMessage> chatReceive(String poolName, DateTime after, DateTime before,
+    int limit, ChatPrivate private) {
   var getMessagesC =
       lib.lookupFunction<ChatReceiveC, ChatReceive>("chatReceive");
-  var m = getMessagesC(poolName.toNativeUtf8(), after.microsecondsSinceEpoch,
-          before.microsecondsSinceEpoch, limit)
+  var m = getMessagesC(
+          poolName.toNativeUtf8(),
+          after.microsecondsSinceEpoch,
+          before.microsecondsSinceEpoch,
+          limit,
+          jsonEncode(private).toNativeUtf8())
       .unwrapList();
 
   return m.map((e) => ChatMessage.fromJson(e as Map<String, dynamic>)).toList();
 }
 
-typedef ChatSend = CResult Function(
-    ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
-int chatSend(
-    String poolName, String contentType, String text, Uint8List binary) {
+typedef ChatSend = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);
+int chatSend(String poolName, String contentType, String text, Uint8List binary,
+    ChatPrivate private) {
   var chatSendC = lib.lookupFunction<ChatSend, ChatSend>("chatSend");
 
   var r = chatSendC(
-    poolName.toNativeUtf8(),
-    contentType.toNativeUtf8(),
-    text.toNativeUtf8(),
-    base64Encode(binary).toNativeUtf8(),
-  );
+      poolName.toNativeUtf8(),
+      contentType.toNativeUtf8(),
+      text.toNativeUtf8(),
+      base64Encode(binary).toNativeUtf8(),
+      jsonEncode(private).toNativeUtf8());
   return r.unwrapInt();
+}
+
+typedef ChatPrivates = CResult Function(ffi.Pointer<Utf8>);
+List<ChatPrivate> chatPrivates(String poolName) {
+  var fun = lib.lookupFunction<ChatPrivates, ChatPrivates>("chatPrivates");
+  var m = fun(poolName.toNativeUtf8()).unwrapList();
+
+  return m.map((e) => dynamicToList<String>(e)).toList();
 }
 
 typedef LibraryListT = CResult Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>);

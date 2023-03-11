@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
     var p =
         await progressDialog(context, "Connecting to $pool...", Isolate.run(() {
       return sp.poolGet(pool);
-    }), errorMessage: "cannot connect to %s");
+    }), errorMessage: "cannot connect to $pool");
     if (p != null && context.mounted) {
       return Navigator.pushNamed(context, "/pool", arguments: pool);
     }

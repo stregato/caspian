@@ -1,3 +1,6 @@
+import 'dart:isolate';
+
+import 'package:caspian/common/progress.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:caspian/safepool/safepool_def.dart' as sp;
 import 'package:flutter/material.dart';
@@ -21,6 +24,10 @@ class _SubPoolState extends State<SubPool> {
   late Map<sp.Identity, bool> _ids;
   String _poolName = "";
   String _sub = "";
+
+  static poolSub(
+          String name, String sub, List<String> ids, List<String> apps) =>
+      Isolate.run(() => sp.poolSub(name, sub, ids, apps));
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +102,7 @@ class _SubPoolState extends State<SubPool> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 16.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       var apps = _apps.entries
                           .where((e) => e.value)
                           .map((e) => e.key)
@@ -105,19 +112,16 @@ class _SubPoolState extends State<SubPool> {
                           .map((e) => e.key.id())
                           .toList();
 
-                      try {
-                        sp.poolSub(_poolName, _sub, ids, apps);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                          "Congrats! You successfully created $_sub",
-                        )));
+                      var name = await progressDialog<String>(
+                          context,
+                          "filling the pool, please wait",
+                          poolSub(_poolName, _sub, ids, apps),
+                          successMessage:
+                              "congrats! you successfully created $_sub",
+                          errorMessage: "creation failed");
+
+                      if (name != null && context.mounted) {
                         Navigator.pop(context);
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text(
-                              "Creation failed: $e",
-                            )));
                       }
                     },
                     child: const Text('Create'),
