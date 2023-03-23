@@ -32,14 +32,18 @@ class Private extends StatelessWidget {
       }).toList();
       return ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed<sp.ChatPrivate>(context, "/apps/chat",
+          Navigator.pushNamed(context, "/apps/chat",
               arguments: ChatArgs(poolName, pr));
         },
         child: Padding(
           padding: const EdgeInsets.all(6),
-          child: Wrap(
-            spacing: 10,
-            children: chips,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Wrap(
+              alignment: WrapAlignment.start,
+              spacing: 10,
+              children: chips,
+            ),
           ),
         ),
       );

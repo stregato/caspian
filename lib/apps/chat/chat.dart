@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:caspian/apps/library/library.dart';
 import 'package:caspian/common/const.dart';
+import 'package:caspian/common/image.dart';
 import 'package:caspian/common/io.dart';
 import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
@@ -405,26 +406,7 @@ class _ChatState extends State<Chat> {
   }
 
   void _handleImageSelection(BuildContext context) async {
-    XFile? xfile;
-    if (isDesktop) {
-      var pickerResult = await FilePicker.platform.pickFiles(
-          type: FileType.any,
-          dialogTitle: "choose image",
-          initialDirectory: picturesFolder);
-
-      var single = pickerResult?.files.single;
-      if (single == null) {
-        return;
-      }
-
-      xfile = XFile(single.path!, length: single.size);
-    } else {
-      xfile = await ImagePicker().pickImage(
-        imageQuality: 70,
-        maxWidth: 1440,
-        source: ImageSource.gallery,
-      );
-    }
+    XFile? xfile = await pickImage();
 
     if (xfile != null) {
       final bytes = await xfile.readAsBytes();

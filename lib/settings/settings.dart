@@ -1,6 +1,7 @@
 import 'dart:io';
 
 //import 'package:file_selector/file_selector.dart';
+import 'package:caspian/common/image.dart';
 import 'package:flutter/material.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,6 +19,17 @@ class _SettingsState extends State<Settings> {
   static String _logLevel = "Error";
 
   int _fullReset = 5;
+  late Uint8List _avatar;
+
+  _selectAvatar() async {
+    XFile? xfile = await pickImage();
+    if (xfile == null) return;
+
+    var bytes = await xfile.readAsBytes();
+    setState(() {
+      _avatar = bytes;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +45,107 @@ class _SettingsState extends State<Settings> {
       "Trace": 6,
     };
 
+    var self = sp.securityGetSelf();
+    var nick = TextEditingController(text: self.nick);
+    var email = TextEditingController(text: self.email);
+    _avatar = self.avatar;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
-        automaticallyImplyLeading: false,
       ),
-      body: Container(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(children: [
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Your nick'),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: nick,
+                    ),
+                    TextFormField(
+                      decoration:
+                          const InputDecoration(labelText: 'Your email'),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: email,
+                    ),
+                  ]),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                InkWell(
+                  onTap: _selectAvatar,
+                  child: Image.memory(
+                    _avatar,
+                    width: 128,
+                  ),
+                )
+              ],
+            ),
+            ElevatedButton.icon(
+                style: buttonStyle,
+                label: const Text("Update"),
+                icon: const Icon(Icons.save),
+                onPressed: () {
+                  self.avatar = _avatar;
+                  self.nick = nick.text;
+                  self.email = email.text;
+                  sp.securitySetSelf(self);
+                }),
+            const SizedBox(height: 6),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    style: buttonStyle,
+                    label: const Text('Export Identity'),
+                    icon: const Icon(Icons.download),
+                    onPressed: () {},
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    style: buttonStyle,
+                    label: const Text('Import Identity'),
+                    icon: const Icon(Icons.upload),
+                    onPressed: () {
+                      try {
+                        var logs = sp.logs();
+
+                        if (Platform.isAndroid || Platform.isIOS) {
+                          var file = XFile.fromData(
+                              Uint8List.fromList(logs.codeUnits),
+                              mimeType: "text/plain",
+                              name: "safepool.log");
+                          Share.shareXFiles([file],
+                              subject: "Dump from Caspian");
+                        } else {
+                          // getSavePath(suggestedName: "safepool.log")
+                          //     .then((value) {
+                          //   File(value!).writeAsString(logs);
+                          // });
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              "Cannot dump: $e",
+                            )));
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 20),
             const Text("Danger Zone",
                 textAlign: TextAlign.center,
@@ -50,7 +153,6 @@ class _SettingsState extends State<Settings> {
                     color: Colors.red,
                     fontSize: 16,
                     fontWeight: FontWeight.bold)),
-            const SizedBox(height: 6),
             DropdownButton(
                 value: _logLevel,
                 items: logLevels.keys

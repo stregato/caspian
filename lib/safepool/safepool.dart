@@ -126,6 +126,22 @@ String securitySelfId() {
   return fun().unwrapString();
 }
 
+typedef SecurityGetSelf = CResult Function();
+Identity securityGetSelf() {
+  var fun =
+      lib.lookupFunction<SecurityGetSelf, SecurityGetSelf>("securityGetSelf");
+  var m = fun().unwrapMap();
+  return Identity.fromJson(m);
+}
+
+typedef SecuritySetSelf = CResult Function(ffi.Pointer<Utf8>);
+void securitySetSelf(Identity i) {
+  var fun =
+      lib.lookupFunction<SecuritySetSelf, SecuritySetSelf>("securitySetSelf");
+  var j = jsonEncode(i);
+  fun(j.toNativeUtf8()).unwrapVoid();
+}
+
 typedef SecurityIdentityFromId = CResult Function(ffi.Pointer<Utf8>);
 String securityIdentityFromId(String id) {
   var fun = lib.lookupFunction<SecurityIdentityFromId, SecurityIdentityFromId>(

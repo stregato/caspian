@@ -32,6 +32,11 @@ class Key {
   Key.fromJson(Map<String, dynamic> json)
       : public_ = json['pu'],
         private_ = json['pr'];
+
+  Map<String, dynamic> toJson() => {
+        'pu': public_,
+        'pr': private_,
+      };
 }
 
 class Identity {
@@ -39,6 +44,9 @@ class Identity {
   String email = "";
   Key signatureKey = Key();
   Key encryptionKey = Key();
+  Uint8List avatar = Uint8List(0);
+  List<String> trusted = [];
+
   Identity();
 
   String id() {
@@ -52,7 +60,18 @@ class Identity {
       : nick = json['n'],
         email = json['m'] ?? "",
         signatureKey = Key.fromJson(json["s"]),
-        encryptionKey = Key.fromJson(json["e"]);
+        encryptionKey = Key.fromJson(json["e"]),
+        avatar = base64Decode(json["a"] ?? ""),
+        trusted = dynamicToList(json["t"] ?? []);
+
+  Map<String, dynamic> toJson() => {
+        'n': nick,
+        'm': email,
+        's': signatureKey.toJson(),
+        'e': encryptionKey.toJson(),
+        'a': base64Encode(avatar),
+        //     't': jsonEncode(trusted),
+      };
 }
 
 class Invite {
