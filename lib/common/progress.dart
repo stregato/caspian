@@ -34,7 +34,7 @@ Future<T?> progressDialog<T>(
     }
     return null;
   }).then((value) {
-    if (value is CException) {
+    if (value is CException || value is Error) {
       if (errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red,

@@ -19,8 +19,7 @@ class _InviteListState extends State<InviteList> {
         .map(
           (i) => Card(
             child: ListTile(
-              title: Text(
-                  "Invite from ${i.sender.nick} to join ${i.config?.name}"),
+              title: Text("Invite from ${i.sender.nick} to join ${i.name}"),
               subtitle: i.subject.isNotEmpty ? Text(i.subject) : null,
               trailing: const Icon(Icons.join_full),
               onTap: () {},

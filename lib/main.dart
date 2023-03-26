@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:caspian/common/io.dart';
 import 'package:caspian/safepool/safepool.dart';
-import 'package:caspian/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -22,10 +21,10 @@ void main() {
       try {
         start("$applicationFolder/.safepool.db", temporaryFolder,
             availableBandwidth);
+        runApp(const CaspianApp());
       } catch (e) {
-        runApp(const Settings());
+        runApp(const CaspianApp(reset: true));
       }
-      runApp(const CaspianApp());
     });
   });
 

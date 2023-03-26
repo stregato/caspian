@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   bitsdojo_window_windows
   connectivity_plus
+  desktop_drop
   share_plus
   url_launcher_windows
   window_size

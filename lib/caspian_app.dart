@@ -13,12 +13,14 @@ import 'package:caspian/pool/pool.dart';
 import 'package:caspian/pool/home.dart';
 import 'package:caspian/pool/settings.dart';
 import 'package:caspian/pool/subpool.dart';
+import 'package:caspian/settings/reset.dart';
 import 'package:caspian/settings/settings.dart';
 import 'package:flutter/material.dart';
 
 class CaspianApp extends StatelessWidget {
   //final Stream<Uri> _unilinkSub;
-  const CaspianApp({super.key});
+  final bool _reset;
+  const CaspianApp({bool reset = false, super.key}) : _reset = reset;
 
   // This widget is the root of your application.
   @override
@@ -28,25 +30,29 @@ class CaspianApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/",
-      routes: {
-        "/": (context) => const Home(),
-        "/addPool": (context) => const AddPool(),
-        "/addPool/create": (context) => const CreatePool(),
-        "/addPool/import": (context) => const ImportPool(),
-        "/settings": (context) => const Settings(),
-        "/pool": (context) => const Pool(),
-        "/pool/sub": (context) => const SubPool(),
-        "/pool/settings": (context) => const PoolSettings(),
-        "/apps/chat": (context) => const Chat(),
-        "/apps/private": (context) => const Private(),
-        "/apps/library": (context) => const Library(),
-        "/apps/library/upload": (context) => const UploadFile(),
+      initialRoute: '/',
+      home: _reset ? const Reset() : null,
+      routes: _reset
+          ? {}
+          : {
+              "/": (context) => const Home(),
+              "/addPool": (context) => const AddPool(),
+              "/addPool/create": (context) => const CreatePool(),
+              "/addPool/import": (context) => const ImportPool(),
+              "/settings": (context) => const Settings(),
+
+              "/pool": (context) => const Pool(),
+              "/pool/sub": (context) => const SubPool(),
+              "/pool/settings": (context) => const PoolSettings(),
+              "/apps/chat": (context) => const Chat(),
+              "/apps/private": (context) => const Private(),
+              "/apps/library": (context) => const Library(),
+              "/apps/library/upload": (context) => const UploadFile(),
 //        "/apps/library/download": (context) => const DownloadFile(),
-        "/apps/library/actions": (context) => const LibraryActions(),
-        "/apps/invite": (context) => const Invite(),
-        "/apps/invite/list": (context) => const InviteList(),
-      },
+              "/apps/library/actions": (context) => const LibraryActions(),
+              "/apps/invite": (context) => const Invite(),
+              "/apps/invite/list": (context) => const InviteList(),
+            },
     );
   }
 }

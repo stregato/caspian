@@ -27,12 +27,12 @@ class _ImportPoolState extends State<ImportPool> {
     _token = value;
     try {
       var i = sp.poolParseInvite(_token!);
-      if (i.config != null) {
+      if (i.exchanges.isNotEmpty) {
         _validateMessage = i.subject == ""
-            ? "Invite to ${i.config?.name} by ${i.sender.nick}"
-            : "Invite to ${i.config?.name} by ${i.sender.nick}: ${i.subject}";
+            ? "Invite to ${i.name} by ${i.sender.nick}"
+            : "Invite to ${i.name} by ${i.sender.nick}: ${i.subject}";
         _validToken = true;
-        _title = "Join ${i.config?.name}";
+        _title = "Join ${i.name}";
       } else {
         _validateMessage = "Invite by ${i.sender.nick} is not for you";
         _validToken = false;

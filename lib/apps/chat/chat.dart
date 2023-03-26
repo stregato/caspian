@@ -12,6 +12,7 @@ import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool_def.dart' as sp;
 import 'package:caspian/safepool/safepool.dart' as sp;
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart' as chat;
@@ -216,84 +217,6 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments;
-    if (args is String) {
-      if (_poolName != args) {
-        _poolName = args;
-      }
-    } else if (args is ChatArgs) {
-      if (_poolName != args.poolName) {
-        _poolName = args.poolName;
-        _private = args.private;
-      }
-    }
-
-    if (_users.isEmpty) {
-      _setUsers();
-      Future.delayed(
-          const Duration(milliseconds: 10), () => _loadMoreMessages(true));
-    }
-
-    var title = _private.isEmpty ? "Chat $_poolName" : "Private $_poolName";
-
-    var privateChips = _private
-        .map((e) => _users[e]?.firstName!)
-        .where((e) => e != null)
-        .map((e) => Chip(
-              avatar: CircleAvatar(
-                backgroundColor: Colors.grey.shade800,
-                child: Text(e!.substring(0, 1)),
-              ),
-              label: Text(e),
-            ))
-        .toList();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          ElevatedButton.icon(
-            label: const Text("Sub"),
-            onPressed: () {
-              Navigator.pushNamed(context, "/pool/sub", arguments: _poolName);
-            },
-            icon: const Icon(Icons.child_care),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Card(
-            child: Row(
-              children: privateChips,
-            ),
-          ),
-          Expanded(
-            child: chat.Chat(
-              messages: _messages,
-              onAttachmentPressed: () {
-                _handleAttachmentPressed(context);
-              },
-              onMessageTap: _handleMessageTap,
-              onPreviewDataFetched: _handlePreviewDataFetched,
-              onSendPressed: _handleSendPressed,
-              onEndReached: _handleEndReached,
-              // onEndReachedThreshold: _pageThresold,
-              isLastPage: _isLastPage,
-              showUserAvatars: true,
-              showUserNames: true,
-              user: _currentUser,
-              customMessageBuilder: _customMessageBuilder,
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: MainNavigationBar(_poolName),
-    );
-  }
-
   Future<void> _handleEndReached() async {
     var after = DateTime.fromMicrosecondsSinceEpoch(0);
     var before = _from;
@@ -375,59 +298,86 @@ class _ChatState extends State<Chat> {
     );
   }
 
+  void _addFile(String filePath) async {
+    var size = File(filePath).lengthSync();
+    var name = ph.basename(filePath);
+    sp.librarySend(_poolName, filePath, "uploads/$name", true, []);
+    final mimeType = lookupMimeType(filePath);
+
+    var uri = "library:/uploads/$name";
+    var id = sp.chatSend(_poolName, mimeType!, uri, Uint8List(0), _private);
+
+    final message = types.FileMessage(
+      author: _currentUser,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      id: "$id",
+      mimeType: mimeType,
+      name: name,
+      size: size,
+      uri: uri,
+    );
+    _loaded.add("$id");
+
+    _addMessage(message);
+  }
+
   void _handleFileSelection() async {
     final result = await FilePicker.platform.pickFiles(
         type: FileType.any,
         dialogTitle: "file to send",
         initialDirectory: documentsFolder);
 
-    if (result != null && result.files.single.path != null) {
-      var localPath = result.files.single.path!;
-      var name = ph.basename(localPath);
-      sp.librarySend(_poolName, localPath, "uploads/$name", true, []);
-      final mimeType = lookupMimeType(localPath);
+    for (var file in result!.files) {
+      _addFile(file.path!);
+      // var name = ph.basename(localPath);
+      // sp.librarySend(_poolName, localPath, "uploads/$name", true, []);
+      // final mimeType = lookupMimeType(localPath);
 
-      var uri = "library:/uploads/$name";
-      var id = sp.chatSend(_poolName, mimeType!, uri, Uint8List(0), _private);
+      // var uri = "library:/uploads/$name";
+      // var id = sp.chatSend(_poolName, mimeType!, uri, Uint8List(0), _private);
 
-      final message = types.FileMessage(
-        author: _currentUser,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: "$id",
-        mimeType: mimeType,
-        name: name,
-        size: result.files.single.size,
-        uri: uri,
-      );
-      _loaded.add("$id");
+      // final message = types.FileMessage(
+      //   author: _currentUser,
+      //   createdAt: DateTime.now().millisecondsSinceEpoch,
+      //   id: "$id",
+      //   mimeType: mimeType,
+      //   name: name,
+      //   size: result.files.single.size,
+      //   uri: uri,
+      // );
+      // _loaded.add("$id");
 
-      _addMessage(message);
+      // _addMessage(message);
     }
+  }
+
+  void _addImage(XFile xfile) async {
+    final bytes = await xfile.readAsBytes();
+    final image = await decodeImageFromList(bytes);
+
+    final mimeType = lookupMimeType(xfile.path);
+    var id = sp.chatSend(
+        _poolName, mimeType ?? "image/jpeg", xfile.name, bytes, _private);
+
+    final message = types.ImageMessage(
+      author: _currentUser,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      height: image.height.toDouble(),
+      id: "$id",
+      name: xfile.name,
+      size: bytes.length,
+      uri: xfile.path,
+      width: image.width.toDouble(),
+    );
+
+    _addMessage(message);
   }
 
   void _handleImageSelection(BuildContext context) async {
     XFile? xfile = await pickImage();
 
     if (xfile != null) {
-      final bytes = await xfile.readAsBytes();
-      final image = await decodeImageFromList(bytes);
-
-      final mimeType = lookupMimeType(xfile.path);
-      var id = sp.chatSend(
-          _poolName, mimeType ?? "image/jpeg", xfile.name, bytes, _private);
-
-      final message = types.ImageMessage(
-        author: _currentUser,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        height: image.height.toDouble(),
-        id: "$id",
-        name: xfile.name,
-        size: bytes.length,
-        uri: xfile.path,
-        width: image.width.toDouble(),
-      );
-
-      _addMessage(message);
+      _addImage(xfile);
     }
   }
 
@@ -440,6 +390,57 @@ class _ChatState extends State<Chat> {
 
         Navigator.pushNamed(context, "/apps/library",
             arguments: LibraryArgs(_poolName, folder));
+      }
+    }
+  }
+
+  Future<bool?> _inlineImagesDialog() async {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Images or Files?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('The dropped files contain images'),
+                Text('Would you like to inline as images or add as files?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Inlined Images'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            TextButton(
+              child: const Text('Files'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _dropFiles(List<XFile> files) async {
+    var imageFiles = files.where((f) {
+      var mimeType = lookupMimeType(f.path);
+      return mimeType.toString().startsWith("image/");
+    });
+    var inlineImages =
+        imageFiles.isNotEmpty ? await _inlineImagesDialog() ?? false : false;
+
+    for (var f in files) {
+      if (inlineImages && imageFiles.contains(f)) {
+        _addImage(f);
+      } else {
+        _addFile(f.path);
       }
     }
   }
@@ -463,5 +464,88 @@ class _ChatState extends State<Chat> {
       _loaded.add(message.id);
       _messages.insert(0, message);
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments;
+    if (args is String) {
+      if (_poolName != args) {
+        _poolName = args;
+      }
+    } else if (args is ChatArgs) {
+      if (_poolName != args.poolName) {
+        _poolName = args.poolName;
+        _private = args.private;
+      }
+    }
+
+    if (_users.isEmpty) {
+      _setUsers();
+      Future.delayed(
+          const Duration(milliseconds: 10), () => _loadMoreMessages(true));
+    }
+
+    var title = _private.isEmpty ? "Chat $_poolName" : "Private $_poolName";
+
+    var privateChips = _private
+        .map((e) => _users[e]?.firstName!)
+        .where((e) => e != null)
+        .map((e) => Chip(
+              avatar: CircleAvatar(
+                backgroundColor: Colors.grey.shade800,
+                child: Text(e!.substring(0, 1)),
+              ),
+              label: Text(e),
+            ))
+        .toList();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          ElevatedButton.icon(
+            label: const Text("Sub"),
+            onPressed: () {
+              Navigator.pushNamed(context, "/pool/sub", arguments: _poolName);
+            },
+            icon: const Icon(Icons.child_care),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Card(
+            child: Row(
+              children: privateChips,
+            ),
+          ),
+          DropTarget(
+            onDragDone: (details) async {
+              _dropFiles(details.files);
+            },
+            child: Expanded(
+              child: chat.Chat(
+                messages: _messages,
+                onAttachmentPressed: () {
+                  _handleAttachmentPressed(context);
+                },
+                onMessageTap: _handleMessageTap,
+                onPreviewDataFetched: _handlePreviewDataFetched,
+                onSendPressed: _handleSendPressed,
+                onEndReached: _handleEndReached,
+                // onEndReachedThreshold: _pageThresold,
+                isLastPage: _isLastPage,
+                showUserAvatars: true,
+                showUserNames: true,
+                user: _currentUser,
+                customMessageBuilder: _customMessageBuilder,
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: MainNavigationBar(_poolName),
+    );
   }
 }

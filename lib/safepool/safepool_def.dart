@@ -76,15 +76,17 @@ class Identity {
 
 class Invite {
   String subject = "";
+  String name = "";
   Identity sender = Identity();
-  List<String> recipientsId = List.empty();
-  Config? config;
+  List<String> exchanges = [];
+
   Invite();
 
   Invite.fromJson(Map<String, dynamic> json)
-      : config =
-            json["config"] != null ? Config.fromJson(json["config"]) : null,
-        sender = Identity.fromJson(json["sender"]);
+      : subject = json["subject"] ?? "",
+        name = json["name"],
+        sender = Identity.fromJson(json["sender"]),
+        exchanges = dynamicToList<String>(json["exchanges"]);
 }
 
 class Pool {
@@ -96,7 +98,7 @@ class Pool {
 
   Pool.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        apps = json['apps'] ?? ['chat', 'private', 'library', 'invite'],
+        apps = dynamicToList(json['apps'] ?? []),
         self = Identity.fromJson(json['self']),
         trusted = json['trusted'],
         connection = json['connection'];

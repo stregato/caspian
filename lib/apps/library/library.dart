@@ -5,6 +5,7 @@ import 'package:caspian/common/progress.dart';
 import 'package:caspian/navigation/bar.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:caspian/safepool/safepool_def.dart' as sp;
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:caspian/apps/chat/theme.dart';
@@ -220,10 +221,24 @@ class _LibraryState extends State<Library> {
               ),
             ],
           ),
-          ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(8),
-            children: items,
+          DropTarget(
+            onDragDone: (details) {
+              for (var file in details.files) {
+                var s = FileSelection(file.name, file.path, false);
+                Navigator.pushNamed(context, "/apps/library/upload",
+                        arguments: UploadArgs(_poolName, s))
+                    .then((value) => setState(
+                          () {},
+                        ));
+              }
+            },
+            child: Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(8),
+                children: items,
+              ),
+            ),
           ),
         ]),
       ),
