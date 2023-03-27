@@ -22,6 +22,14 @@ ffi.DynamicLibrary getLibrary() {
       return ffi.DynamicLibrary.open('/usr/lib/libsafepool.so');
     }
   }
+  if (Platform.isMacOS) {
+    // if (kDebugMode) {
+    //   return ffi.DynamicLibrary.open('macos/libs/amd64/libsafepool.dylib');
+    // } else {
+      return ffi.DynamicLibrary.open('libsafepool.dylib');
+    // }
+
+  }
   return ffi.DynamicLibrary.process();
 }
 
