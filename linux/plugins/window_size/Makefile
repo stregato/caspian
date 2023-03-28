@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_SOURCE_DIR = /home/mp/Github/safekit/caspian/linux
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_BINARY_DIR = /home/mp/Github/safekit/caspian/linux
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safepool/caspian/linux/CMakeFiles /home/mp/Github/safepool/caspian/linux/plugins/window_size//CMakeFiles/progress.marks
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safepool/caspian/linux/CMakeFiles 0
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safekit/caspian/linux/CMakeFiles /home/mp/Github/safekit/caspian/linux/plugins/window_size//CMakeFiles/progress.marks
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safekit/caspian/linux/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/clean
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/preinstall
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/preinstall
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 plugins/window_size/CMakeFiles/window_size_plugin.dir/rule:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/CMakeFiles/window_size_plugin.dir/rule
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/window_size/CMakeFiles/window_size_plugin.dir/rule
 .PHONY : plugins/window_size/CMakeFiles/window_size_plugin.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ window_size_plugin: plugins/window_size/CMakeFiles/window_size_plugin.dir/rule
 
 # fast build rule for target.
 window_size_plugin/fast:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/build
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/build
 .PHONY : window_size_plugin/fast
 
 window_size_plugin.o: window_size_plugin.cc.o
@@ -180,7 +180,7 @@ window_size_plugin.o: window_size_plugin.cc.o
 
 # target to build an object file
 window_size_plugin.cc.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o
 .PHONY : window_size_plugin.cc.o
 
 window_size_plugin.i: window_size_plugin.cc.i
@@ -188,7 +188,7 @@ window_size_plugin.i: window_size_plugin.cc.i
 
 # target to preprocess a source file
 window_size_plugin.cc.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.i
 .PHONY : window_size_plugin.cc.i
 
 window_size_plugin.s: window_size_plugin.cc.s
@@ -196,7 +196,7 @@ window_size_plugin.s: window_size_plugin.cc.s
 
 # target to generate assembly for a file
 window_size_plugin.cc.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/window_size/CMakeFiles/window_size_plugin.dir/build.make plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.s
 .PHONY : window_size_plugin.cc.s
 
 # Help Target
@@ -226,6 +226,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

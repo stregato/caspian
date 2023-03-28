@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_SOURCE_DIR = /home/mp/Github/safekit/caspian/linux
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_BINARY_DIR = /home/mp/Github/safekit/caspian/linux
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +132,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safepool/caspian/linux/CMakeFiles /home/mp/Github/safepool/caspian/linux//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safekit/caspian/linux/CMakeFiles /home/mp/Github/safekit/caspian/linux//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safepool/caspian/linux/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safekit/caspian/linux/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -199,6 +199,45 @@ bitsdojo_window_linux_plugin: cmake_check_build_system
 bitsdojo_window_linux_plugin/fast:
 	$(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build
 .PHONY : bitsdojo_window_linux_plugin/fast
+
+#=============================================================================
+# Target rules for targets named desktop_drop_plugin
+
+# Build rule for target.
+desktop_drop_plugin: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 desktop_drop_plugin
+.PHONY : desktop_drop_plugin
+
+# fast build rule for target.
+desktop_drop_plugin/fast:
+	$(MAKE) $(MAKESILENT) -f plugins/desktop_drop/CMakeFiles/desktop_drop_plugin.dir/build.make plugins/desktop_drop/CMakeFiles/desktop_drop_plugin.dir/build
+.PHONY : desktop_drop_plugin/fast
+
+#=============================================================================
+# Target rules for targets named gtk_plugin
+
+# Build rule for target.
+gtk_plugin: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtk_plugin
+.PHONY : gtk_plugin
+
+# fast build rule for target.
+gtk_plugin/fast:
+	$(MAKE) $(MAKESILENT) -f plugins/gtk/CMakeFiles/gtk_plugin.dir/build.make plugins/gtk/CMakeFiles/gtk_plugin.dir/build
+.PHONY : gtk_plugin/fast
+
+#=============================================================================
+# Target rules for targets named url_launcher_linux_plugin
+
+# Build rule for target.
+url_launcher_linux_plugin: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 url_launcher_linux_plugin
+.PHONY : url_launcher_linux_plugin
+
+# fast build rule for target.
+url_launcher_linux_plugin/fast:
+	$(MAKE) $(MAKESILENT) -f plugins/url_launcher_linux/CMakeFiles/url_launcher_linux_plugin.dir/build.make plugins/url_launcher_linux/CMakeFiles/url_launcher_linux_plugin.dir/build
+.PHONY : url_launcher_linux_plugin/fast
 
 #=============================================================================
 # Target rules for targets named window_size_plugin
@@ -300,6 +339,9 @@ help:
 	@echo "... flutter_assemble"
 	@echo "... bitsdojo_window_linux_plugin"
 	@echo "... caspian"
+	@echo "... desktop_drop_plugin"
+	@echo "... gtk_plugin"
+	@echo "... url_launcher_linux_plugin"
 	@echo "... window_size_plugin"
 	@echo "... flutter/generated_plugin_registrant.o"
 	@echo "... flutter/generated_plugin_registrant.i"

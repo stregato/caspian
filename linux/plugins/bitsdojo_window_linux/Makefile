@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_SOURCE_DIR = /home/mp/Github/safekit/caspian/linux
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_BINARY_DIR = /home/mp/Github/safekit/caspian/linux
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safepool/caspian/linux/CMakeFiles /home/mp/Github/safepool/caspian/linux/plugins/bitsdojo_window_linux//CMakeFiles/progress.marks
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safepool/caspian/linux/CMakeFiles 0
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safekit/caspian/linux/CMakeFiles /home/mp/Github/safekit/caspian/linux/plugins/bitsdojo_window_linux//CMakeFiles/progress.marks
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mp/Github/safekit/caspian/linux/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/clean
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/preinstall
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/preinstall
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/rule:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/rule
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/rule
 .PHONY : plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ bitsdojo_window_linux_plugin: plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_
 
 # fast build rule for target.
 bitsdojo_window_linux_plugin/fast:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build
 .PHONY : bitsdojo_window_linux_plugin/fast
 
 api.o: api.cpp.o
@@ -180,7 +180,7 @@ api.o: api.cpp.o
 
 # target to build an object file
 api.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api.cpp.o
 .PHONY : api.cpp.o
 
 api.i: api.cpp.i
@@ -188,7 +188,7 @@ api.i: api.cpp.i
 
 # target to preprocess a source file
 api.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api.cpp.i
 .PHONY : api.cpp.i
 
 api.s: api.cpp.s
@@ -196,7 +196,7 @@ api.s: api.cpp.s
 
 # target to generate assembly for a file
 api.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api.cpp.s
 .PHONY : api.cpp.s
 
 api_impl.o: api_impl.cpp.o
@@ -204,7 +204,7 @@ api_impl.o: api_impl.cpp.o
 
 # target to build an object file
 api_impl.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api_impl.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api_impl.cpp.o
 .PHONY : api_impl.cpp.o
 
 api_impl.i: api_impl.cpp.i
@@ -212,7 +212,7 @@ api_impl.i: api_impl.cpp.i
 
 # target to preprocess a source file
 api_impl.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api_impl.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api_impl.cpp.i
 .PHONY : api_impl.cpp.i
 
 api_impl.s: api_impl.cpp.s
@@ -220,7 +220,7 @@ api_impl.s: api_impl.cpp.s
 
 # target to generate assembly for a file
 api_impl.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api_impl.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/api_impl.cpp.s
 .PHONY : api_impl.cpp.s
 
 bitsdojo_window_plugin.o: bitsdojo_window_plugin.cpp.o
@@ -228,7 +228,7 @@ bitsdojo_window_plugin.o: bitsdojo_window_plugin.cpp.o
 
 # target to build an object file
 bitsdojo_window_plugin.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/bitsdojo_window_plugin.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/bitsdojo_window_plugin.cpp.o
 .PHONY : bitsdojo_window_plugin.cpp.o
 
 bitsdojo_window_plugin.i: bitsdojo_window_plugin.cpp.i
@@ -236,7 +236,7 @@ bitsdojo_window_plugin.i: bitsdojo_window_plugin.cpp.i
 
 # target to preprocess a source file
 bitsdojo_window_plugin.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/bitsdojo_window_plugin.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/bitsdojo_window_plugin.cpp.i
 .PHONY : bitsdojo_window_plugin.cpp.i
 
 bitsdojo_window_plugin.s: bitsdojo_window_plugin.cpp.s
@@ -244,7 +244,7 @@ bitsdojo_window_plugin.s: bitsdojo_window_plugin.cpp.s
 
 # target to generate assembly for a file
 bitsdojo_window_plugin.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/bitsdojo_window_plugin.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/bitsdojo_window_plugin.cpp.s
 .PHONY : bitsdojo_window_plugin.cpp.s
 
 debug_helper.o: debug_helper.cpp.o
@@ -252,7 +252,7 @@ debug_helper.o: debug_helper.cpp.o
 
 # target to build an object file
 debug_helper.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/debug_helper.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/debug_helper.cpp.o
 .PHONY : debug_helper.cpp.o
 
 debug_helper.i: debug_helper.cpp.i
@@ -260,7 +260,7 @@ debug_helper.i: debug_helper.cpp.i
 
 # target to preprocess a source file
 debug_helper.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/debug_helper.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/debug_helper.cpp.i
 .PHONY : debug_helper.cpp.i
 
 debug_helper.s: debug_helper.cpp.s
@@ -268,7 +268,7 @@ debug_helper.s: debug_helper.cpp.s
 
 # target to generate assembly for a file
 debug_helper.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/debug_helper.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/debug_helper.cpp.s
 .PHONY : debug_helper.cpp.s
 
 gtk_utils.o: gtk_utils.cpp.o
@@ -276,7 +276,7 @@ gtk_utils.o: gtk_utils.cpp.o
 
 # target to build an object file
 gtk_utils.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/gtk_utils.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/gtk_utils.cpp.o
 .PHONY : gtk_utils.cpp.o
 
 gtk_utils.i: gtk_utils.cpp.i
@@ -284,7 +284,7 @@ gtk_utils.i: gtk_utils.cpp.i
 
 # target to preprocess a source file
 gtk_utils.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/gtk_utils.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/gtk_utils.cpp.i
 .PHONY : gtk_utils.cpp.i
 
 gtk_utils.s: gtk_utils.cpp.s
@@ -292,7 +292,7 @@ gtk_utils.s: gtk_utils.cpp.s
 
 # target to generate assembly for a file
 gtk_utils.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/gtk_utils.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/gtk_utils.cpp.s
 .PHONY : gtk_utils.cpp.s
 
 window_impl.o: window_impl.cpp.o
@@ -300,7 +300,7 @@ window_impl.o: window_impl.cpp.o
 
 # target to build an object file
 window_impl.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_impl.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_impl.cpp.o
 .PHONY : window_impl.cpp.o
 
 window_impl.i: window_impl.cpp.i
@@ -308,7 +308,7 @@ window_impl.i: window_impl.cpp.i
 
 # target to preprocess a source file
 window_impl.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_impl.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_impl.cpp.i
 .PHONY : window_impl.cpp.i
 
 window_impl.s: window_impl.cpp.s
@@ -316,7 +316,7 @@ window_impl.s: window_impl.cpp.s
 
 # target to generate assembly for a file
 window_impl.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_impl.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_impl.cpp.s
 .PHONY : window_impl.cpp.s
 
 window_info.o: window_info.cpp.o
@@ -324,7 +324,7 @@ window_info.o: window_info.cpp.o
 
 # target to build an object file
 window_info.cpp.o:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_info.cpp.o
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_info.cpp.o
 .PHONY : window_info.cpp.o
 
 window_info.i: window_info.cpp.i
@@ -332,7 +332,7 @@ window_info.i: window_info.cpp.i
 
 # target to preprocess a source file
 window_info.cpp.i:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_info.cpp.i
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_info.cpp.i
 .PHONY : window_info.cpp.i
 
 window_info.s: window_info.cpp.s
@@ -340,7 +340,7 @@ window_info.s: window_info.cpp.s
 
 # target to generate assembly for a file
 window_info.cpp.s:
-	cd /home/mp/Github/safepool/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_info.cpp.s
+	cd /home/mp/Github/safekit/caspian/linux && $(MAKE) $(MAKESILENT) -f plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/build.make plugins/bitsdojo_window_linux/CMakeFiles/bitsdojo_window_linux_plugin.dir/window_info.cpp.s
 .PHONY : window_info.cpp.s
 
 # Help Target
@@ -388,6 +388,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

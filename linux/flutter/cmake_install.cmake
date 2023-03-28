@@ -1,8 +1,8 @@
-# Install script for directory: /home/mp/Github/safepool/caspian/linux/flutter
+# Install script for directory: /home/mp/Github/safekit/caspian/linux/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mp/Github/safepool/caspian/linux/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/mp/Github/safekit/caspian/linux/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

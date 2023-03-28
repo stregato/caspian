@@ -1,8 +1,8 @@
-# Install script for directory: /home/mp/Github/safepool/caspian/linux
+# Install script for directory: /home/mp/Github/safekit/caspian/linux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mp/Github/safepool/caspian/linux/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/mp/Github/safekit/caspian/linux/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,109 +44,148 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   
-  file(REMOVE_RECURSE "/home/mp/Github/safepool/caspian/linux/bundle/")
+  file(REMOVE_RECURSE "/home/mp/Github/safekit/caspian/linux/bundle/")
   
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian")
+  if(EXISTS "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian"
+         FILE "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian"
          RPATH "$ORIGIN/lib")
   endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/mp/Github/safepool/caspian/linux/bundle/caspian")
+   "/home/mp/Github/safekit/caspian/linux/bundle/caspian")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/mp/Github/safepool/caspian/linux/bundle" TYPE EXECUTABLE FILES "/home/mp/Github/safepool/caspian/linux/intermediates_do_not_run/caspian")
-  if(EXISTS "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian")
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle" TYPE EXECUTABLE FILES "/home/mp/Github/safekit/caspian/linux/intermediates_do_not_run/caspian")
+  if(EXISTS "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian")
     file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian"
-         OLD_RPATH "/home/mp/Github/safepool/caspian/linux/plugins/bitsdojo_window_linux:/home/mp/Github/safepool/caspian/linux/plugins/window_size:/home/mp/Github/safepool/caspian/linux/flutter/ephemeral:"
+         FILE "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian"
+         OLD_RPATH "/home/mp/Github/safekit/caspian/linux/plugins/bitsdojo_window_linux:/home/mp/Github/safekit/caspian/linux/plugins/desktop_drop:/home/mp/Github/safekit/caspian/linux/plugins/gtk:/home/mp/Github/safekit/caspian/linux/plugins/url_launcher_linux:/home/mp/Github/safekit/caspian/linux/plugins/window_size:/home/mp/Github/safekit/caspian/linux/flutter/ephemeral:"
          NEW_RPATH "$ORIGIN/lib")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/home/mp/Github/safepool/caspian/linux/bundle/caspian")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/home/mp/Github/safekit/caspian/linux/bundle/caspian")
     endif()
   endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/mp/Github/safepool/caspian/linux/bundle/data/icudtl.dat")
+   "/home/mp/Github/safekit/caspian/linux/bundle/data/icudtl.dat")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/mp/Github/safepool/caspian/linux/bundle/data" TYPE FILE FILES "/home/mp/Github/safepool/caspian/linux/flutter/ephemeral/icudtl.dat")
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/data" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/flutter/ephemeral/icudtl.dat")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/mp/Github/safepool/caspian/linux/bundle/lib/libflutter_linux_gtk.so")
+   "/home/mp/Github/safekit/caspian/linux/bundle/lib/libflutter_linux_gtk.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/mp/Github/safepool/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safepool/caspian/linux/flutter/ephemeral/libflutter_linux_gtk.so")
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/flutter/ephemeral/libflutter_linux_gtk.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/mp/Github/safepool/caspian/linux/bundle/lib/libbitsdojo_window_linux_plugin.so")
+   "/home/mp/Github/safekit/caspian/linux/bundle/lib/libbitsdojo_window_linux_plugin.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/mp/Github/safepool/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safepool/caspian/linux/plugins/bitsdojo_window_linux/libbitsdojo_window_linux_plugin.so")
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/plugins/bitsdojo_window_linux/libbitsdojo_window_linux_plugin.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/mp/Github/safepool/caspian/linux/bundle/lib/libwindow_size_plugin.so")
+   "/home/mp/Github/safekit/caspian/linux/bundle/lib/libdesktop_drop_plugin.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/mp/Github/safepool/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safepool/caspian/linux/plugins/window_size/libwindow_size_plugin.so")
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/plugins/desktop_drop/libdesktop_drop_plugin.so")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/home/mp/Github/safekit/caspian/linux/bundle/lib/libgtk_plugin.so")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/plugins/gtk/libgtk_plugin.so")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/home/mp/Github/safekit/caspian/linux/bundle/lib/liburl_launcher_linux_plugin.so")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/plugins/url_launcher_linux/liburl_launcher_linux_plugin.so")
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/home/mp/Github/safekit/caspian/linux/bundle/lib/libwindow_size_plugin.so")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/lib" TYPE FILE FILES "/home/mp/Github/safekit/caspian/linux/plugins/window_size/libwindow_size_plugin.so")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   
-  file(REMOVE_RECURSE "/home/mp/Github/safepool/caspian/linux/bundle/data/flutter_assets")
+  file(REMOVE_RECURSE "/home/mp/Github/safekit/caspian/linux/bundle/data/flutter_assets")
   
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Runtime" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/mp/Github/safepool/caspian/linux/bundle/data/flutter_assets")
+   "/home/mp/Github/safekit/caspian/linux/bundle/data/flutter_assets")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/home/mp/Github/safepool/caspian/linux/bundle/data" TYPE DIRECTORY FILES "/home/mp/Github/safepool/caspian/build//flutter_assets")
+  file(INSTALL DESTINATION "/home/mp/Github/safekit/caspian/linux/bundle/data" TYPE DIRECTORY FILES "/home/mp/Github/safekit/caspian/build//flutter_assets")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/mp/Github/safepool/caspian/linux/flutter/cmake_install.cmake")
-  include("/home/mp/Github/safepool/caspian/linux/plugins/bitsdojo_window_linux/cmake_install.cmake")
-  include("/home/mp/Github/safepool/caspian/linux/plugins/window_size/cmake_install.cmake")
+  include("/home/mp/Github/safekit/caspian/linux/flutter/cmake_install.cmake")
+  include("/home/mp/Github/safekit/caspian/linux/plugins/bitsdojo_window_linux/cmake_install.cmake")
+  include("/home/mp/Github/safekit/caspian/linux/plugins/desktop_drop/cmake_install.cmake")
+  include("/home/mp/Github/safekit/caspian/linux/plugins/gtk/cmake_install.cmake")
+  include("/home/mp/Github/safekit/caspian/linux/plugins/url_launcher_linux/cmake_install.cmake")
+  include("/home/mp/Github/safekit/caspian/linux/plugins/window_size/cmake_install.cmake")
 
 endif()
 
@@ -158,5 +197,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mp/Github/safepool/caspian/linux/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mp/Github/safekit/caspian/linux/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

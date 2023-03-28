@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_SOURCE_DIR = /home/mp/Github/safekit/caspian/linux
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mp/Github/safepool/caspian/linux
+CMAKE_BINARY_DIR = /home/mp/Github/safekit/caspian/linux
 
 # Include any dependencies generated for this target.
 include plugins/window_size/CMakeFiles/window_size_plugin.dir/depend.make
@@ -72,16 +72,16 @@ include plugins/window_size/CMakeFiles/window_size_plugin.dir/flags.make
 plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o: plugins/window_size/CMakeFiles/window_size_plugin.dir/flags.make
 plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o: flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc
 plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o: plugins/window_size/CMakeFiles/window_size_plugin.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mp/Github/safepool/caspian/linux/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o"
-	cd /home/mp/Github/safepool/caspian/linux/plugins/window_size && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o -MF CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o.d -o CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o -c /home/mp/Github/safepool/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mp/Github/safekit/caspian/linux/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o"
+	cd /home/mp/Github/safekit/caspian/linux/plugins/window_size && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o -MF CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o.d -o CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.o -c /home/mp/Github/safekit/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc
 
 plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.i"
-	cd /home/mp/Github/safepool/caspian/linux/plugins/window_size && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mp/Github/safepool/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc > CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.i
+	cd /home/mp/Github/safekit/caspian/linux/plugins/window_size && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mp/Github/safekit/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc > CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.i
 
 plugins/window_size/CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.s"
-	cd /home/mp/Github/safepool/caspian/linux/plugins/window_size && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mp/Github/safepool/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc -o CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.s
+	cd /home/mp/Github/safekit/caspian/linux/plugins/window_size && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mp/Github/safekit/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux/window_size_plugin.cc -o CMakeFiles/window_size_plugin.dir/window_size_plugin.cc.s
 
 # Object files for target window_size_plugin
 window_size_plugin_OBJECTS = \
@@ -106,18 +106,18 @@ plugins/window_size/libwindow_size_plugin.so: /usr/lib/x86_64-linux-gnu/libgio-2
 plugins/window_size/libwindow_size_plugin.so: /usr/lib/x86_64-linux-gnu/libgobject-2.0.so
 plugins/window_size/libwindow_size_plugin.so: /usr/lib/x86_64-linux-gnu/libglib-2.0.so
 plugins/window_size/libwindow_size_plugin.so: plugins/window_size/CMakeFiles/window_size_plugin.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mp/Github/safepool/caspian/linux/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libwindow_size_plugin.so"
-	cd /home/mp/Github/safepool/caspian/linux/plugins/window_size && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/window_size_plugin.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mp/Github/safekit/caspian/linux/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library libwindow_size_plugin.so"
+	cd /home/mp/Github/safekit/caspian/linux/plugins/window_size && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/window_size_plugin.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 plugins/window_size/CMakeFiles/window_size_plugin.dir/build: plugins/window_size/libwindow_size_plugin.so
 .PHONY : plugins/window_size/CMakeFiles/window_size_plugin.dir/build
 
 plugins/window_size/CMakeFiles/window_size_plugin.dir/clean:
-	cd /home/mp/Github/safepool/caspian/linux/plugins/window_size && $(CMAKE_COMMAND) -P CMakeFiles/window_size_plugin.dir/cmake_clean.cmake
+	cd /home/mp/Github/safekit/caspian/linux/plugins/window_size && $(CMAKE_COMMAND) -P CMakeFiles/window_size_plugin.dir/cmake_clean.cmake
 .PHONY : plugins/window_size/CMakeFiles/window_size_plugin.dir/clean
 
 plugins/window_size/CMakeFiles/window_size_plugin.dir/depend:
-	cd /home/mp/Github/safepool/caspian/linux && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mp/Github/safepool/caspian/linux /home/mp/Github/safepool/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux /home/mp/Github/safepool/caspian/linux /home/mp/Github/safepool/caspian/linux/plugins/window_size /home/mp/Github/safepool/caspian/linux/plugins/window_size/CMakeFiles/window_size_plugin.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/mp/Github/safekit/caspian/linux && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mp/Github/safekit/caspian/linux /home/mp/Github/safekit/caspian/linux/flutter/ephemeral/.plugin_symlinks/window_size/linux /home/mp/Github/safekit/caspian/linux /home/mp/Github/safekit/caspian/linux/plugins/window_size /home/mp/Github/safekit/caspian/linux/plugins/window_size/CMakeFiles/window_size_plugin.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : plugins/window_size/CMakeFiles/window_size_plugin.dir/depend
 

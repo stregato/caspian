@@ -1,8 +1,8 @@
-# Install script for directory: /home/mp/Github/safepool/caspian/linux/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_linux/linux
+# Install script for directory: /home/mp/Github/safekit/caspian/linux/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_linux/linux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mp/Github/safepool/caspian/linux/bundle")
+  set(CMAKE_INSTALL_PREFIX "/home/mp/Github/safekit/caspian/linux/bundle")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
