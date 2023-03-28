@@ -21,15 +21,14 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1320DFA529D18488006BBA9A /* libsafepool.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1320DFA429D18488006BBA9A /* libsafepool.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		1320DFA629D1854E006BBA9A /* libsafepool.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 1320DFA429D18488006BBA9A /* libsafepool.dylib */; };
-		1320DFA729D18646006BBA9A /* libsafepool.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 1320DFA429D18488006BBA9A /* libsafepool.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		64C60B1CAE6D0E9C3FA271EE /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C28C97714FE3CB46F7E7657D /* Pods_Runner.framework */; };
+		ED90C88729D3089100EC1723 /* libsafepool.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED90C88629D3089100EC1723 /* libsafepool.dylib */; };
+		ED90C88829D309AE00EC1723 /* libsafepool.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = ED90C88629D3089100EC1723 /* libsafepool.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +48,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1320DFA729D18646006BBA9A /* libsafepool.dylib in Bundle Framework */,
+				ED90C88829D309AE00EC1723 /* libsafepool.dylib in Bundle Framework */,
 			);
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,7 +56,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1320DFA429D18488006BBA9A /* libsafepool.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsafepool.dylib; path = libs/amd64/libsafepool.dylib; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
 		335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneratedPluginRegistrant.swift; sourceTree = "<group>"; };
 		33CC10ED2044A3C60003C045 /* caspian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = caspian.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +76,7 @@
 		A0647FFAEB8CEB6E43BE41B3 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		B55D6CA24EC7138557D7D67A /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		C28C97714FE3CB46F7E7657D /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED90C88629D3089100EC1723 /* libsafepool.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsafepool.dylib; path = libs/libsafepool.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,8 +84,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED90C88729D3089100EC1723 /* libsafepool.dylib in Frameworks */,
 				64C60B1CAE6D0E9C3FA271EE /* Pods_Runner.framework in Frameworks */,
-				1320DFA529D18488006BBA9A /* libsafepool.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +170,7 @@
 		D73912EC22F37F3D000D13A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1320DFA429D18488006BBA9A /* libsafepool.dylib */,
+				ED90C88629D3089100EC1723 /* libsafepool.dylib */,
 				C28C97714FE3CB46F7E7657D /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -254,7 +253,6 @@
 			files = (
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
-				1320DFA629D1854E006BBA9A /* libsafepool.dylib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,14 +435,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/amd64",
+					"$(PROJECT_DIR)/libs",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=arm64]" = (
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libs/arm64",
-				);
-				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs/amd64",
+					"$(PROJECT_DIR)/libs",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -575,14 +570,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/amd64",
+					"$(PROJECT_DIR)/libs",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=arm64]" = (
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libs/arm64",
-				);
-				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs/amd64",
+					"$(PROJECT_DIR)/libs",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -607,14 +599,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/amd64",
+					"$(PROJECT_DIR)/libs",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=arm64]" = (
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/libs/amd64",
-				);
-				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libs/amd64",
+					"$(PROJECT_DIR)/libs",
 				);
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
