@@ -108,8 +108,11 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
       },
       items: [
         const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        const BottomNavigationBarItem(
-            icon: Icon(Icons.settings), label: "Settings"),
+        widget.poolName == null
+            ? const BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: "Settings")
+            : const BottomNavigationBarItem(
+                icon: Icon(Icons.waves), label: "Pool"),
         BottomNavigationBarItem(
             icon: Icon(count == 0
                 ? Icons.notifications_none

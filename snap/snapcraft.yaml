@@ -1,0 +1,54 @@
+name: caspian
+version: 0.1.0
+summary: Linux UI for Safepool
+description: App to access and use safepool exchanges
+icon: snap/gui/caspian.png
+confinement: strict
+base: core22
+grade: stable
+    
+slots:
+  dbus-caspian: 
+    interface: dbus
+    bus: session
+    name: ch.caspian
+    
+apps:
+  caspian:
+    command: caspian
+    extensions: [gnome]
+    plugs:
+    - network
+    - network-manager
+    - network-observe
+    - desktop
+    - home
+    - wayland
+    - x11
+    slots:
+      - dbus-caspian
+parts:   
+  caspian:
+    source: .
+    plugin: flutter
+    flutter-channel: stable
+    # build-snaps: 
+    #   - safepool
+    build-packages:
+      - pkg-config
+      - libgtk-3-dev
+      - libharfbuzz0b
+    flutter-target: lib/main.dart
+    stage-packages:
+      - libglib2.0-0
+      - libgtk-3-0
+      - libharfbuzz0b
+    stage-snaps: 
+      - safepool
+  zenity:
+    plugin: nil
+    stage-packages:
+      - zenity
+    prime:
+      - usr/bin/zenity
+      - usr/share/zenity/*

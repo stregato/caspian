@@ -13,22 +13,26 @@ ffi.DynamicLibrary getLibrary() {
     return ffi.DynamicLibrary.open('libsafepool.so');
   }
   if (Platform.isLinux) {
-    if (kDebugMode) {
-      return ffi.DynamicLibrary.open('linux/libs/amd64/libsafepool.so');
-    } else {
+    var locs = [
+      'linux/libs/amd64/libsafepool.so',
+      'libsafepool.so',
+      '/usr/lib/libsafepool.so'
+    ];
+
+    for (var loc in locs) {
       try {
-        return ffi.DynamicLibrary.open('libsafepool.so');
-      } catch (_) {}
-      return ffi.DynamicLibrary.open('/usr/lib/libsafepool.so');
+        return ffi.DynamicLibrary.open(loc);
+      } catch (e) {
+        print(e);
+      }
     }
   }
   if (Platform.isMacOS) {
     // if (kDebugMode) {
     //   return ffi.DynamicLibrary.open('macos/libs/amd64/libsafepool.dylib');
     // } else {
-      return ffi.DynamicLibrary.open('libsafepool.dylib');
+    return ffi.DynamicLibrary.open('libsafepool.dylib');
     // }
-
   }
   return ffi.DynamicLibrary.process();
 }
