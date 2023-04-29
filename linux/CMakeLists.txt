@@ -47,7 +47,7 @@ function(APPLY_STANDARD_SETTINGS TARGET)
 endfunction()
 
 add_library(safepool SHARED IMPORTED GLOBAL)
-set_target_properties(safepool PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libs/amd64/libsafepool.so)
+set_target_properties(safepool PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libsafepool.so)
 
 
 # Flutter library and tool build rules.

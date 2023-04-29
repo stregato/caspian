@@ -14,7 +14,7 @@ ffi.DynamicLibrary getLibrary() {
   }
   if (Platform.isLinux) {
     var locs = [
-      'linux/libs/amd64/libsafepool.so',
+      'linux/libsafepool.so',
       'libsafepool.so',
       '/usr/lib/libsafepool.so'
     ];

@@ -1,6 +1,7 @@
 import 'dart:isolate';
 
 import 'package:caspian/common/progress.dart';
+import 'package:caspian/pool/addstorage.dart';
 import 'package:caspian/safepool/safepool.dart' as sp;
 import 'package:caspian/safepool/safepool_def.dart' as sp;
 import 'package:flutter/material.dart';
@@ -22,22 +23,6 @@ class _CreatePoolState extends State<CreatePool> {
 
   final _config = sp.Config();
   final _appsMap = {for (var e in availableApps) e: true};
-  String? _publicExchange;
-  String? _privateExchange;
-
-  String? _validateExchangeUrl(String? text) {
-    if (text == null || text == "") {
-      return null;
-    }
-    var uri = Uri.parse(text);
-    return uri.host != "" && validSchemas.contains(uri.scheme)
-        ? null
-        : "Enter a valid url and click +";
-  }
-
-  bool _validExchangeUrl(String? text) {
-    return (text != null && text != "" && _validateExchangeUrl(text) == null);
-  }
 
   bool _validConfig() {
     var apps = [];
@@ -47,9 +32,6 @@ class _CreatePoolState extends State<CreatePool> {
 
     return _config.name != "" && _config.public_.isNotEmpty && apps.isNotEmpty;
   }
-
-  final _publicController = TextEditingController();
-  final _privateController = TextEditingController();
 
   static _poolCreate(sp.Config config, List<String> apps) =>
       Isolate.run(() => sp.poolCreate(config, apps));
@@ -81,7 +63,7 @@ class _CreatePoolState extends State<CreatePool> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                    "Enter a name and at least a public Exchange, i.e. a URI to sftp or s3"),
+                    "Enter a name and at least a public storage, i.e. sftp or s3"),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Name'),
                   validator: (value) {
@@ -89,32 +71,40 @@ class _CreatePoolState extends State<CreatePool> {
                   },
                   onChanged: (val) => setState(() => _config.name = val),
                 ),
-                TextFormField(
-                  maxLines: 3,
-                  controller: _publicController,
-                  decoration: InputDecoration(
-                    labelText: 'Public Exchanges',
-                    suffixIcon: IconButton(
-                      onPressed: _validExchangeUrl(_publicExchange)
-                          ? () {
-                              setState(() {
-                                _config.public_.add(_publicExchange ?? "");
-                                _publicController.clear();
-                                _publicExchange = null;
-                              });
-                            }
-                          : null,
-                      icon: const Icon(Icons.add),
+                Row(
+                  children: [
+                    const Text(
+                      "Storages",
+                      style: TextStyle(color: Colors.black54, fontSize: 14),
                     ),
-                  ),
-                  validator: _validateExchangeUrl,
-                  onChanged: (val) => setState(() => _publicExchange = val),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) => const AddStorage()))
+                            .then((value) {
+                          if (value is Storage) {
+                            setState(() {
+                              if (value.public) {
+                                _config.public_.add(value.url);
+                              } else {
+                                _config.private_.add(value.url);
+                              }
+                            });
+                          }
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                    )
+                  ],
                 ),
                 ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: _config.public_.length,
                   itemBuilder: (context, index) => ListTile(
+                    leading: const Icon(Icons.share),
                     trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
@@ -125,32 +115,12 @@ class _CreatePoolState extends State<CreatePool> {
                     title: Text(_config.public_[index]),
                   ),
                 ),
-                TextFormField(
-                  maxLines: 3,
-                  controller: _privateController,
-                  decoration: InputDecoration(
-                    labelText: 'Private Exchanges',
-                    suffixIcon: IconButton(
-                      onPressed: _validExchangeUrl(_privateExchange)
-                          ? () {
-                              setState(() {
-                                _config.private_.add(_privateExchange ?? "");
-                                _publicController.clear();
-                                _privateExchange = null;
-                              });
-                            }
-                          : null,
-                      icon: const Icon(Icons.add),
-                    ),
-                  ),
-                  validator: _validateExchangeUrl,
-                  onChanged: (val) => setState(() => _publicExchange = val),
-                ),
                 ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: _config.private_.length,
                   itemBuilder: (context, index) => ListTile(
+                    leading: const Icon(Icons.person),
                     trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
@@ -160,6 +130,13 @@ class _CreatePoolState extends State<CreatePool> {
                         }),
                     title: Text(_config.private_[index]),
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "Services",
+                  style: TextStyle(color: Colors.black54, fontSize: 14),
                 ),
                 Column(children: appsList),
                 Container(
