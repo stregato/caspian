@@ -34,6 +34,10 @@ ffi.DynamicLibrary getLibrary() {
     return ffi.DynamicLibrary.open('libsafepool.dylib');
     // }
   }
+  if (Platform.isIOS) {
+    return ffi.DynamicLibrary.process();
+    //return ffi.DynamicLibrary.open('libsafepool.dylib');
+  }
   return ffi.DynamicLibrary.process();
 }
 

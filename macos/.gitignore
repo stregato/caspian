@@ -5,3 +5,7 @@
 # Xcode-related
 **/dgph
 **/xcuserdata/
+
+**/arm64/
+**/x86/
+Podfile.lock
