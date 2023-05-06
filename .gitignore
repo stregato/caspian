@@ -65,3 +65,7 @@ linux/CMakeFiles/caspian.dir/flags.make
 linux/CMakeFiles/caspian.dir/link.txt
 linux/CMakeFiles/caspian.dir/progress.make
 .DS_Store
+ios/Podfile.lock
+macos/Podfile.lock
+
+*.snap
