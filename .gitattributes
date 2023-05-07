@@ -1,0 +1,4 @@
+safepool.dll filter=lfs diff=lfs merge=lfs -text
+libsafepool.so filter=lfs diff=lfs merge=lfs -text
+libsafepool.dylib filter=lfs diff=lfs merge=lfs -text
+safepool.a filter=lfs diff=lfs merge=lfs -text
